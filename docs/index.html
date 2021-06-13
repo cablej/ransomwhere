@@ -11,9 +11,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <noscript>
     <link rel="stylesheet" href="assets/css/noscript.css" />
   </noscript>
+  <meta name="description" content="Ransomwhere is the open, crowdsourced ransomware payment tracker.">
+  <meta name="og:description" property="og:description"
+    content="Ransomwhere is the open, crowdsourced ransomware payment tracker." />
+  <meta name="keywords" content="ransomware, ransomwhere, bitcoin, ransom, payment, tracker">
+  <meta name="author" content="Jack Cable">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:creator" content="@ransomwhere_" />
+  <meta name="twitter:site" content="@ransomwhere_" />
 </head>
 
 <body class="is-preload">
@@ -26,7 +35,7 @@
 
         <!-- Logo -->
         <a href="index.html" class="logo">
-          <span class="symbol"><img src="images/lock.svg" alt="" /></span><span class="title">Ransomwhere</span>
+          <span class="symbol"><img src="images/lock.png" alt="" /></span><span class="title">Ransomwhere</span>
         </a>
 
         <!-- Nav -->
@@ -55,11 +64,12 @@
     <div id="main">
       <div class="inner">
         <header>
-          <h1 id="count">$72,493</h1>
-          <h2>Total tracked ransomware payments in the past week. [DEMO DATA]</h2>
-          <p>Ransomwhere is an open, crowdsourced ransomware payment tracker. <a href="#">Browse and download ransomware
+          <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;">$0</h1>
+          <h3>Total tracked ransomware payments in the past week. [DEMO DATA]</h3>
+          <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#data">Browse and download
+              ransomware
               payment
-              data</a> or help build our dataset by <a href="#">submitting
+              data</a> or help build our dataset by <a href="#submit">submitting
               ransomware demands you have received</a>.</p>
         </header>
         <section class="tiles">
@@ -68,7 +78,7 @@
               <img src="images/pic01.jpg" alt="" />
             </span>
             <a href="generic.html">
-              <h2>Magna</h2>
+              <h2>Browse Data</h2>
               <div class="content">
                 <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
               </div>
@@ -79,123 +89,19 @@
               <img src="images/pic02.jpg" alt="" />
             </span>
             <a href="generic.html">
-              <h2>Lorem</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style3">
-            <span class="image">
-              <img src="images/pic03.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Feugiat</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style4">
-            <span class="image">
-              <img src="images/pic04.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Tempus</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style5">
-            <span class="image">
-              <img src="images/pic05.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Aliquam</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style6">
-            <span class="image">
-              <img src="images/pic06.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Veroeros</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style2">
-            <span class="image">
-              <img src="images/pic07.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Ipsum</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style3">
-            <span class="image">
-              <img src="images/pic08.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Dolor</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style1">
-            <span class="image">
-              <img src="images/pic09.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Nullam</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style5">
-            <span class="image">
-              <img src="images/pic10.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Ultricies</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style6">
-            <span class="image">
-              <img src="images/pic11.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Dictum</h2>
-              <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-              </div>
-            </a>
-          </article>
-          <article class="style4">
-            <span class="image">
-              <img src="images/pic12.jpg" alt="" />
-            </span>
-            <a href="generic.html">
-              <h2>Pretium</h2>
+              <h2>Submit addresses</h2>
               <div class="content">
                 <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
               </div>
             </a>
           </article>
         </section>
+        <div style="margin-top: 2em;" id="data">
+          <h2>Browse ransomware data</h2>
+        </div>
+        <div style="margin-top: 2em;" id="submit">
+          <h2>Submit ransomware addresses</h2>
+        </div>
       </div>
     </div>
 
@@ -203,39 +109,22 @@
     <footer id="footer">
       <div class="inner">
         <section>
-          <h2>Get in touch</h2>
-          <form method="post" action="#">
-            <div class="fields">
-              <div class="field half">
-                <input type="text" name="name" id="name" placeholder="Name" />
-              </div>
-              <div class="field half">
-                <input type="email" name="email" id="email" placeholder="Email" />
-              </div>
-              <div class="field">
-                <textarea name="message" id="message" placeholder="Message"></textarea>
-              </div>
-            </div>
-            <ul class="actions">
-              <li><input type="submit" value="Send" class="primary" /></li>
-            </ul>
-          </form>
-        </section>
-        <section>
           <h2>Follow</h2>
           <ul class="icons">
-            <li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-            <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-            <li><a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
-            <li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
-            <li><a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a></li>
-            <li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-            <li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+            <li><a href="https://twitter.com/ransomwhere_" class="icon brands style2 fa-twitter"><span
+                  class="label">Twitter</span></a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Get in Touch</h2>
+          <ul class="icons">
+            <li><a href="mailto:cablej@stanford.edu" class="icon solid style2 fa-envelope"><span
+                  class="label">Email</span></a>
+            </li>
           </ul>
         </section>
         <ul class="copyright">
-          <li>&copy; Untitled. All rights reserved</li>
+          <li>Built by <a href="https://cablej.io/">Jack Cable</a>.</li>
           <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
         </ul>
       </div>

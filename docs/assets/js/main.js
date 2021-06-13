@@ -4,15 +4,50 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+var ransomTotal = 2.51;
+var dollarDisplay = true;
+
+var numAnim = new countUp.CountUp("count", ransomTotal, {
+  prefix: "$",
+  decimalPlaces: 2
+});
+
+toggleDollar = () => {
+  dollarDisplay = !dollarDisplay;
+  numAnim = new countUp.CountUp("count", ransomTotal, {
+    prefix: dollarDisplay ? "$" : "₿",
+    decimalPlaces: 2
+  });
+  if (dollarDisplay) {
+    numAnim.update(ransomTotal * bitcoinExchange);
+  } else {
+    numAnim.update(ransomTotal);
+  }
+};
+
+updateBitcoinPrice = async () => {
+  if (dollarDisplay) {
+    $.get("https://api.coinbase.com/v2/prices/spot?currency=USD").then(
+      (res) => {
+        price = res.data.amount;
+        console.log(price);
+        bitcoinExchange = price;
+        if (dollarDisplay) {
+          numAnim.update(ransomTotal * bitcoinExchange);
+        } else {
+          numAnim.update(ransomTotal);
+        }
+      }
+    );
+  }
+};
+
 (function($) {
   var $window = $(window),
     $body = $("body");
 
-  var numAnim = new countUp.CountUp("count", 78563.73, {
-    prefix: "$",
-    decimalPlaces: 2
-  });
-  numAnim.start();
+  updateBitcoinPrice();
+  setInterval(updateBitcoinPrice, 5000);
 
   // Breakpoints.
   breakpoints({

@@ -310,11 +310,11 @@ h6 a {
 }
 
 h2 {
-  font-size: 1.1em;
+  font-size: 1.5em;
 }
 
 h3 {
-  font-size: 1em;
+  font-size: 1.1em;
 }
 
 h4 {
@@ -2944,7 +2944,7 @@ body.is-touch .tiles article .content {
 
 #header .logo .symbol img {
   display: block;
-  width: 2em;
+  /* width: 2em; */
   height: 2em;
 }
 
