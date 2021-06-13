@@ -7,6 +7,14 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+.paper {
+  border: 1px solid lightgray;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+    0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+}
+
 html,
 body,
 div,
@@ -2679,7 +2687,7 @@ button:disabled,
   -ms-transition: -ms-transform 0.5s ease, opacity 0.5s ease;
   transition: transform 0.5s ease, opacity 0.5s ease;
   position: relative;
-  width: calc(33.33333% - 2.5em);
+  width: calc(25% - 2.5em);
   margin: 2.5em 0 0 2.5em;
 }
 

@@ -11,6 +11,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <noscript>
     <link rel="stylesheet" href="assets/css/noscript.css" />
@@ -53,10 +54,10 @@
       <h2>Menu</h2>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="generic.html">Ipsum veroeros</a></li>
-        <li><a href="generic.html">Tempus etiam</a></li>
-        <li><a href="generic.html">Consequat dolor</a></li>
-        <li><a href="elements.html">Elements</a></li>
+        <li><a href="#browse">Browse Data</a></li>
+        <li><a href="#report">Report Addresses</a></li>
+        <li><a href="#download">Download Data</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
     </nav>
 
@@ -66,10 +67,10 @@
         <header>
           <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;">$0</h1>
           <h3>Total tracked ransomware payments in the past week. [DEMO DATA]</h3>
-          <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#data">Browse and download
-              ransomware
-              payment
-              data</a> or help build our dataset by <a href="#submit">submitting
+          <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#browse"></a>Browse and download
+            ransomware
+            payment
+            data</a> or help build our dataset by <a href="#report">reporting
               ransomware demands you have received</a>.</p>
         </header>
         <section class="tiles">
@@ -77,10 +78,10 @@
             <span class="image">
               <img src="images/pic01.jpg" alt="" />
             </span>
-            <a href="generic.html">
+            <a href="#browse">
               <h2>Browse Data</h2>
               <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                <p></p>
               </div>
             </a>
           </article>
@@ -88,19 +89,81 @@
             <span class="image">
               <img src="images/pic02.jpg" alt="" />
             </span>
-            <a href="generic.html">
-              <h2>Submit addresses</h2>
+            <a href="#report">
+              <h2>Report Addresses</h2>
               <div class="content">
-                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                <p></p>
+              </div>
+            </a>
+          </article>
+          <article class="style3">
+            <span class="image">
+              <img src="images/pic03.jpg" alt="" />
+            </span>
+            <a href="#download">
+              <h2>Download Data</h2>
+              <div class="content">
+                <p></p>
+              </div>
+            </a>
+          </article>
+          <article class="style4">
+            <span class="image">
+              <img src="images/pic04.jpg" alt="" />
+            </span>
+            <a href="#faq">
+              <h2>FAQ</h2>
+              <div class="content">
+                <p></p>
               </div>
             </a>
           </article>
         </section>
-        <div style="margin-top: 2em;" id="data">
+        <div style="margin-top: 2em;" id="browse">
           <h2>Browse ransomware data</h2>
         </div>
-        <div style="margin-top: 2em;" id="submit">
-          <h2>Submit ransomware addresses</h2>
+        <div style="margin-top: 2em;" id="report">
+          <h2>Report ransomware addresses</h2>
+          <div class="paper">
+            <form>
+              <label>Enter one or more bitcoin addresses, separated by a newline or comma.</label>
+              <textarea placeholder="Bitcoin addresses"></textarea>
+              <br><label for="variant">Variant (if known): </label>
+              <input id="variant" style="width:50%"></input>
+              <br><br><label for="amount">How much bitcoin was the ransomware demanding?</label>
+              <input type="number" id="amount">
+              <br><br><label for="amount">Upload a screenshot of the ransomware demand. This will be used to verify the
+                report.</label>
+              <input type="file" name="my_file[]" multiple>
+              <br><br>
+              <center>
+                <p>By submitting, you acknowledge that all contents of your report will be made publicly
+                  available.<br>We
+                  appreciate your help adding transparency to the ransomware ecosytem!</p>
+                <input type="submit" value="Submit" class="default" style="width:40%" />
+              </center>
+            </form>
+          </div>
+        </div>
+        <div style="margin-top: 2em;" id="download">
+          <h2>Download data</h2>
+        </div>
+        <div style="margin-top: 2em;" id="faq">
+          <h2>FAQ</h2>
+          <h3>Why track ransomware payments?</h3>
+          <p>Transparency is <a href="https://twitter.com/likethecoins/status/1402248769123631104?s=20"
+              target="_blank">crucially needed</a> in assessing the spread of ransomware and the efficacy of
+            mitigations. Fortunately, due to the transparent nature of Bitcoin, it's trivial to track payments with
+            knowledge of receipt addresses. By crowdsourcing ransomware payment addresses, we hope to provide an open
+            resource for the security community and the public.</p>
+          <h3>Can't someone fake a report?</h3>
+          <p>While it's impossible to verify with complete certainty that a report is accurate, we aim to utilize the
+            wisdom of the crowds to
+            prevent abuse. All reports are required to include a screenshot of the ransomware payment demand, and will
+            be reviewed before being displayed. Addresses with more than one report from different sources will be given
+            priority, and all
+            elements of all reports will be publicly available. We will remove reports if we believe they are
+            untruthful.</p>
         </div>
       </div>
     </div>
@@ -118,7 +181,7 @@
         <section>
           <h2>Get in Touch</h2>
           <ul class="icons">
-            <li><a href="mailto:cablej@stanford.edu" class="icon solid style2 fa-envelope"><span
+            <li><a href="mailto:ransomwhere@lightningsecurity.io" class="icon solid style2 fa-envelope"><span
                   class="label">Email</span></a>
             </li>
           </ul>
@@ -135,6 +198,7 @@
   <!-- Scripts -->
   <script src="assets/js/countup.umd.js"></script>
   <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery-ui.min.js"></script>
   <script src="assets/js/browser.min.js"></script>
   <script src="assets/js/breakpoints.min.js"></script>
   <script src="assets/js/util.js"></script>
