@@ -1,0 +1,25 @@
+service: ransomwhere
+
+custom:
+  bucket: ransomwhere
+
+provider:
+  name: aws
+
+  runtime: nodejs14.x
+  iam.role.statements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::ransomwhere"
+
+plugins:
+  - serverless-offline
+
+functions:
+  submit:
+    handler: handler.submit
+    events:
+      - http:
+          path: submit
+          method: get
