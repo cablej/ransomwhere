@@ -2,25 +2,21 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const model = mongoose.model(
-  "Report",
+  "Address",
   new mongoose.Schema(
     {
-      addresses: {
-        type: [
-          {
-            type: String
-          }
-        ],
+      address: {
+        type: String,
         required: true,
         validate: {
-          validator(addresses) {
-            return addresses.every((a) => validator.isAlphanumeric(a));
+          validator(address) {
+            return validator.isAlphanumeric(address);
           }
         }
       },
       variant: String,
-      amount: Number,
-      screenshot: String
+      balance: Number,
+      blockchain: String
     },
     { timestamps: true }
   )

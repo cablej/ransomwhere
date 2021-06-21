@@ -17,6 +17,12 @@ plugins:
   - serverless-offline
 
 functions:
+  list:
+    handler: handler.list
+    events:
+      - http:
+          path: list
+          method: get
   submit:
     handler: handler.submit
     events:

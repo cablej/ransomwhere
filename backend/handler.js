@@ -4,13 +4,7 @@ const ReportModel = require("./model/Report.js");
 
 mongoose.connect(process.env.mongo_uri);
 
-module.exports.submit = async (event) => {
-  console.log(event);
-
-  await ReportModel.create({
-    name: "testing"
-  });
-
+module.exports.list = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
@@ -21,4 +15,10 @@ module.exports.submit = async (event) => {
       2
     )
   };
+};
+
+module.exports.submit = async (event) => {
+  await ReportModel.create({
+    name: "testing"
+  });
 };
