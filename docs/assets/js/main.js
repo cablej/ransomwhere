@@ -16,6 +16,8 @@ var numAnim = new countUp.CountUp("count", ransomTotal, {
   decimalPlaces: 2
 });
 
+numAnim.update(1000000);
+
 toggleDollar = () => {
   dollarDisplay = !dollarDisplay;
   numAnim = new countUp.CountUp("count", ransomTotal, {
