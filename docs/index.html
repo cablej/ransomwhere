@@ -133,11 +133,15 @@
                 report.</label>
               <input type="file" name="my_file[]" multiple>
               <br><br>
+              <label for="amount">Link to source (if public):</label>
+              <input type="text" placeholder="https://" name="sourceLink" id="sourceLink"></input>
+              <br><br>
               <center>
                 <p>By submitting, you acknowledge that all contents of your report will be made publicly
                   available.<br>We
                   appreciate your help adding transparency to the ransomware ecosytem!</p>
                 <input type="submit" value="Submit" class="default" style="width:40%" />
+                <div id="formResult"></div>
               </center>
             </form>
           </div>
@@ -200,6 +204,16 @@
   <script src="assets/js/breakpoints.min.js"></script>
   <script src="assets/js/util.js"></script>
   <script src="assets/js/main.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6Q48EM6ZN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('set', 'anonymizeIp', true);
+    gtag('config', 'G-Z6Q48EM6ZN');
+  </script>
 
 </body>
 

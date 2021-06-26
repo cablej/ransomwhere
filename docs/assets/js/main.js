@@ -64,14 +64,21 @@ submitReport = (event) => {
     .split(/[\n,]+/);
   variant = $("#variant").val();
   amount = $("#amount").val();
+  source = $("#sourceLink").val();
 
   apiRequest("POST", "submit", {
     addresses,
     variant,
-    amount
+    amount,
+    source
   })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      $("#formResult").html("<br><br>Successfully submitted!");
+    })
+    .catch((err) => {
+      console.log(err);
+      $("#formResult").html("<br><br>Error submitting, please try again.");
+    });
 };
 
 getBalances = () => {
