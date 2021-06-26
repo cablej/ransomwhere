@@ -75,7 +75,6 @@ submitReport = (event) => {
 getBalances = () => {
   apiRequest("GET", "list")
     .then((res) => {
-      console.log(res);
       let addresses = res.result;
       ransomTotal = 0;
       for (address of addresses) {
@@ -91,7 +90,6 @@ getBalances = () => {
 plotBalances = (data) => {
   mapping = {};
   for (let address of data) {
-    console.log(address);
     if (!(address.variant in mapping)) {
       mapping[address.variant] = 0;
     }
