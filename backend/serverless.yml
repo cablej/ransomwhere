@@ -24,12 +24,14 @@ functions:
       - http:
           path: list
           method: get
+          cors: true
   submit:
     handler: api.submit
     events:
       - http:
           path: submit
           method: post
+          cors: true
 
   update:
     handler: cron.update

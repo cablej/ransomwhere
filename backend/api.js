@@ -10,18 +10,29 @@ module.exports.list = async (event) => {
     statusCode: 200,
     body: JSON.stringify({
       result: await AddressModel.find()
-    })
+    }),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true
+    }
   };
 };
 
 module.exports.submit = async (event) => {
-  body = JSON.parse(event.body);
-  console.log(body);
   report = await ReportModel.create({
     addresses: body.addresses,
     variant: body.variant,
     amount: body.amount,
     approved: true
   });
-  return { statusCode: 200, body: JSON.stringify({ result: report }) };
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result: report
+    }),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true
+    }
+  };
 };
