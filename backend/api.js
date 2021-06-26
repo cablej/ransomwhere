@@ -19,6 +19,7 @@ module.exports.list = async (event) => {
 };
 
 module.exports.submit = async (event) => {
+  body = JSON.parse(event.body);
   report = await ReportModel.create({
     addresses: body.addresses,
     variant: body.variant,
