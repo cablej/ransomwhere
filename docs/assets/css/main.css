@@ -7,6 +7,11 @@
 	License: pixelarity.com/license
 */
 
+.chart-container {
+  width: 50%;
+  height: 400px;
+}
+
 .paper {
   border: 1px solid lightgray;
   padding: 25px;

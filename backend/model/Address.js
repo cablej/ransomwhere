@@ -8,6 +8,8 @@ const model = mongoose.model(
       address: {
         type: String,
         required: true,
+        unique: true,
+        index: true,
         validate: {
           validator(address) {
             return validator.isAlphanumeric(address);
@@ -16,7 +18,8 @@ const model = mongoose.model(
       },
       variant: String,
       balance: Number,
-      blockchain: String
+      blockchain: String,
+      balances: []
     },
     { timestamps: true }
   )

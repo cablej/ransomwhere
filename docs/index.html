@@ -61,7 +61,7 @@
       <div class="inner">
         <header>
           <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;">$0</h1>
-          <h3>Total tracked ransomware payments in the past week. [DEMO DATA]</h3>
+          <h3>Total tracked ransomware payments.</h3>
           <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#browse"></a>Browse and download
             ransomware
             payment
@@ -116,17 +116,19 @@
         </section>
         <div style="margin-top: 2em;" id="browse">
           <h2>Browse ransomware data</h2>
+          <div class="chart-container"><canvas id="chart"></canvas>
+          </div>
         </div>
         <div style="margin-top: 2em;" id="report">
           <h2>Report ransomware addresses</h2>
           <div class="paper">
-            <form>
+            <form id="reportForm">
               <label>Enter one or more bitcoin addresses, separated by a newline or comma.</label>
-              <textarea placeholder="Bitcoin addresses"></textarea>
+              <textarea placeholder="Bitcoin addresses" id="addresses"></textarea>
               <br><label for="variant">Variant (if known): </label>
               <input id="variant" style="width:50%"></input>
               <br><br><label for="amount">How much bitcoin is the ransomware demanding?</label>
-              <input type="number" id="amount">
+              <input type="number" id="amount" step="any">
               <br><br><label for="amount">Upload a screenshot of the ransomware demand. This will be used to verify the
                 report.</label>
               <input type="file" name="my_file[]" multiple>
@@ -193,6 +195,7 @@
   <script src="assets/js/countup.umd.js"></script>
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/jquery-ui.min.js"></script>
+  <script src="assets/js/chart.min.js"></script>
   <script src="assets/js/browser.min.js"></script>
   <script src="assets/js/breakpoints.min.js"></script>
   <script src="assets/js/util.js"></script>

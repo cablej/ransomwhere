@@ -20,7 +20,8 @@ const model = mongoose.model(
       },
       variant: String,
       amount: Number,
-      screenshot: String
+      screenshot: String,
+      approved: Boolean
     },
     { timestamps: true }
   )

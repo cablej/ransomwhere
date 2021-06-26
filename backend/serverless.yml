@@ -1,4 +1,5 @@
 service: ransomwhere
+useDotenv: true
 
 custom:
   bucket: ransomwhere
@@ -18,14 +19,17 @@ plugins:
 
 functions:
   list:
-    handler: handler.list
+    handler: api.list
     events:
       - http:
           path: list
           method: get
   submit:
-    handler: handler.submit
+    handler: api.submit
     events:
       - http:
           path: submit
-          method: get
+          method: post
+
+  update:
+    handler: cron.update
