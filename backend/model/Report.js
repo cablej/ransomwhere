@@ -22,7 +22,8 @@ const model = mongoose.model(
       amount: Number,
       screenshot: String,
       approved: Boolean,
-      source: String
+      source: String,
+      notes: String
     },
     { timestamps: true }
   )
