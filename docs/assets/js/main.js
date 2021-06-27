@@ -65,12 +65,14 @@ submitReport = (event) => {
   variant = $("#variant").val();
   amount = $("#amount").val();
   source = $("#sourceLink").val();
+  notes = $("#notes").val();
 
   apiRequest("POST", "submit", {
     addresses,
     variant,
     amount,
-    source
+    source,
+    notes
   })
     .then((res) => {
       $("#formResult").html("<br><br>Successfully submitted!");

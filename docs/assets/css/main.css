@@ -20,6 +20,32 @@
     0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
 }
 
+.inline-select {
+  display: inline;
+  width: auto;
+  border-bottom: dotted 1px rgba(88, 88, 88, 0.5);
+  line-height: inherit;
+  margin-left: 5px;
+  height: 40px;
+  font-weight: 700;
+}
+
+.inline-select:focus {
+  border-bottom: dotted 1px rgba(88, 88, 88, 0.5);
+  box-shadow: none;
+}
+
+.formlist {
+  padding-left: 50px;
+  list-style-type: square;
+}
+
+.formlist label,
+.formlist input {
+  display: inline !important;
+  width: 500px !important;
+}
+
 html,
 body,
 div,

@@ -61,7 +61,12 @@
       <div class="inner">
         <header>
           <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;"></h1>
-          <h3>Total tracked ransomware payments.</h3>
+          <h3 style="display: inline-block;">Total tracked ransomware payments <select class="inline-select">
+              <option value="today">today</option>
+              <option value="week">this week</option>
+              <option value="month">this month</option>
+              <option value="alltime" selected>all time</option>
+            </select></h3>
           <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#browse"></a>Browse and download
             ransomware
             payment
@@ -129,12 +134,20 @@
               <input id="variant" style="width:50%"></input>
               <br><br><label for="amount">How much bitcoin is the ransomware demanding?</label>
               <input type="number" id="amount" step="any">
-              <br><br><label for="amount">Upload a screenshot of the ransomware demand. This will be used to verify the
-                report.</label>
-              <input type="file" name="my_file[]" multiple>
               <br><br>
-              <label for="amount">Link to source (if public):</label>
-              <input type="text" placeholder="https://" name="sourceLink" id="sourceLink"></input>
+              <label>To verify the report:</label>
+              <ul class="formlist">
+                <li><label for="amount">Upload a screenshot of the ransom demand</label>
+                  <input type="file" name="my_file[]" multiple>
+                </li>
+                or
+                <li>
+                  <label for="amount">Link to source (if public):</label>
+                  <input type="text" placeholder="https://" name="sourceLink" id="sourceLink"></input>
+                </li>
+              </ul>
+              <label>Any other notes (optional)</label>
+              <textarea placeholder="Notes" id="notes"></textarea>
               <br><br>
               <center>
                 <p>By submitting, you acknowledge that all contents of your report will be made publicly
@@ -152,8 +165,7 @@
         <div style="margin-top: 2em;" id="faq">
           <h2>FAQ</h2>
           <h3>Why track ransomware payments?</h3>
-          <p>Transparency is <a href="https://twitter.com/likethecoins/status/1402248769123631104?s=20"
-              target="_blank">crucially needed</a> in assessing the spread of ransomware and the efficacy of
+          <p>Transparency is crucially needed in assessing the spread of ransomware and the efficacy of
             mitigations. Fortunately, due to the transparent nature of Bitcoin, it's trivial to track payments with
             knowledge of receipt addresses. By crowdsourcing ransomware payment addresses, we hope to provide an open
             resource for the security community and the public.</p>

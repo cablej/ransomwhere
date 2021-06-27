@@ -25,7 +25,8 @@ module.exports.submit = async (event) => {
     variant: body.variant,
     amount: body.amount,
     approved: true,
-    source: body.source
+    source: body.source,
+    notes: body.notes
   });
   return {
     statusCode: 200,
