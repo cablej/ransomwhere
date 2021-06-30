@@ -23,7 +23,8 @@ const model = mongoose.model(
       screenshot: String,
       approved: Boolean,
       source: String,
-      notes: String
+      notes: String,
+      blockchain: { type: String, default: "bitcoin" }
     },
     { timestamps: true }
   )
