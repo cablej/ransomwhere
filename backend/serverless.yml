@@ -35,3 +35,6 @@ functions:
 
   update:
     handler: cron.update
+
+  import:
+    handler: cron.import
