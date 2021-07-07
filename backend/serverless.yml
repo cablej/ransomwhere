@@ -33,6 +33,14 @@ functions:
           method: post
           cors: true
 
+  reports:
+    handler: api.reports
+    events:
+      - http:
+          path: reports
+          method: get
+          cors: true
+
   update:
     handler: cron.update
 

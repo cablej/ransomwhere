@@ -1,24 +1,41 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const ReportModel = require("./model/Report.js");
-const AddressModel = require("./model/Address.js");
+const mongoose = require('mongoose');
+const validator = require('validator');
+const ReportModel = require('./model/Report.js');
+const AddressModel = require('./model/Address.js');
 
 mongoose.connect(process.env.MONGO_URI);
 
-module.exports.list = async (event) => {
+module.exports.list = async event => {
   return {
     statusCode: 200,
     body: JSON.stringify({
       result: await AddressModel.find()
     }),
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
     }
   };
 };
 
-module.exports.submit = async (event) => {
+module.exports.reports = async event => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result: await ReportModel.find({
+        approved:
+          event.queryStringParameters &&
+          event.queryStringParameters.approved == 'true'
+      })
+    }),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
+  };
+};
+
+module.exports.submit = async event => {
   body = JSON.parse(event.body);
   report = await ReportModel.create({
     addresses: body.addresses,
@@ -34,8 +51,8 @@ module.exports.submit = async (event) => {
       result: report
     }),
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
     }
   };
 };
