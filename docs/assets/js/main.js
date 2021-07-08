@@ -20,7 +20,7 @@ var numAnim = new countUp.CountUp('count', ransomTotal, {
   decimalPlaces: 2
 });
 
-numAnim.update(100000000);
+numAnim.update(56880381.92);
 
 formatDate = date => {
   var d = new Date(date),
