@@ -123,14 +123,16 @@
         </section>
         <div style="margin-top: 2em;" id="browse">
           <h2>Browse ransomware data</h2>
-          <div class="chart-container"><canvas id="chart"></canvas>
-          </div>
+          <div class="chart-container"><canvas id="chart"></canvas></div>
+          <div class="chart-container"><canvas id="chart2"></canvas>
+          </div><br><br>
           <h3>Latest transactions</h3>
           <table id="transactions" class="display" style="width:100%">
             <thead>
               <tr>
+                <th>Family</th>
                 <th>Address</th>
-                <th>Time</th>
+                <th>Date</th>
                 <th>Amount</th>
                 <th>Hash</th>
               </tr>
@@ -141,7 +143,7 @@
             <thead>
               <tr>
                 <th>Created</th>
-                <th>Variant</th>
+                <th>Family</th>
                 <th>Addresses</th>
                 <th>Source</th>
               </tr>
@@ -154,8 +156,8 @@
             <form id="reportForm">
               <label>Enter one or more bitcoin addresses, separated by a newline or comma.</label>
               <textarea placeholder="Bitcoin addresses" id="addresses"></textarea>
-              <br><label for="variant">Variant (if known): </label>
-              <input id="variant" style="width:50%"></input>
+              <br><label for="family">Family (if known): </label>
+              <input id="family" style="width:50%"></input>
               <br><br><label for="amount">How much bitcoin is the ransomware demanding?</label>
               <input type="number" id="amount" step="any">
               <br><br>
@@ -198,7 +200,8 @@
           <p>While it's impossible to verify with complete certainty that a report is accurate, we aim to utilize the
             wisdom of the crowds to
             prevent abuse. All reports are required to include a screenshot of the ransomware payment demand, and will
-            be reviewed before being displayed. Addresses with more than one report from different sources will be given
+            be reviewed before being displayed. Addresses with more than one report from different sources will be
+            given
             priority, and all
             elements of all reports will be publicly available. We will remove reports if we believe they are
             untruthful.</p>

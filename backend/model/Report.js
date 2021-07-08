@@ -18,7 +18,7 @@ const model = mongoose.model(
           }
         }
       },
-      variant: String,
+      family: String,
       amount: Number,
       screenshot: String,
       state: {

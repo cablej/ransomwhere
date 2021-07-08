@@ -22,15 +22,15 @@ module.exports.update = async event => {
     for (let address of report.addresses) {
       if (
         address in addressesMap &&
-        addressesMap[address].variant != report.variant
+        addressesMap[address].family != report.family
       ) {
         console.warn(
-          'Same address associated with mutliple variants: ' + address
+          'Same address associated with mutliple familys: ' + address
         );
         continue;
       }
       addressesMap[address] = {
-        variant: report.variant,
+        family: report.family,
         blockchain: report.blockchain,
         report: report._id,
         transactions: []
@@ -90,7 +90,7 @@ module.exports.update = async event => {
         { address },
         {
           address,
-          variant: report.variant,
+          family: report.family,
           blockchain: report.blockchain,
           balance,
           transactions: report.transactions
@@ -169,7 +169,7 @@ module.exports.import = async event => {
   for (let mapping in mappings) {
     addresses = new Set();
     reportObj = {
-      variant: mappings[mapping],
+      family: mappings[mapping],
       notes: ''
     };
     for (let report of reports[mapping]) {

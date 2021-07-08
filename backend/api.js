@@ -56,7 +56,7 @@ module.exports.submit = async event => {
   body = JSON.parse(event.body);
   report = await ReportModel.create({
     addresses: body.addresses,
-    variant: body.variant,
+    family: body.family,
     amount: body.amount,
     source: body.source,
     notes: body.notes

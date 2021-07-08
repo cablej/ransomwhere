@@ -29,8 +29,8 @@ getReports = (state = 'new', admin = false) => {
           wireFormat: 'YYYY-MM-DD'
         },
         {
-          title: 'Variant',
-          data: 'variant',
+          title: 'Family',
+          data: 'family',
           render: $.fn.dataTable.render.text()
         },
         {

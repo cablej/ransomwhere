@@ -16,7 +16,7 @@ const model = mongoose.model(
           }
         }
       },
-      variant: String,
+      family: String,
       balance: Number,
       blockchain: String,
       transactions: [
