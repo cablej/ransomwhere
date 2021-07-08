@@ -62,10 +62,11 @@
       <div class="inner">
         <header>
           <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;"></h1>
-          <h3 style="display: inline-block;">Total tracked ransomware payments <select class="inline-select">
-              <option value="today">today</option>
+          <h3 style="display: inline-block;">Total tracked ransomware payments <select class="inline-select"
+              id="time-select">
               <option value="week">this week</option>
               <option value="month">this month</option>
+              <option value="year">this year</option>
               <option value="alltime" selected>all time</option>
             </select></h3>
           <p>Ransomwhere is the open, crowdsourced ransomware payment tracker. <a href="#browse"></a>Browse and download
@@ -184,6 +185,7 @@
         </div>
         <div style="margin-top: 2em;" id="download">
           <h2>Download data</h2>
+          <a class="button secondary" onclick="downloadFile()">Download all data</a>
         </div>
         <div style="margin-top: 2em;" id="faq">
           <h2>FAQ</h2>

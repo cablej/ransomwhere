@@ -6,6 +6,8 @@ var dollarDisplay = true;
 var API_URL = 'https://api.ransomwhe.re/';
 
 let table;
+let chart;
+let addresses;
 
 var numAnim = new countUp.CountUp('count', ransomTotal, {
   prefix: '$',
@@ -67,29 +69,54 @@ submitReport = event => {
     });
 };
 
-getBalances = () => {
+getBalance = (address, minimum) => {
+  let total = 0;
+  for (transaction of address.transactions) {
+    if (transaction.time > minimum) {
+      total += transaction.amount;
+    }
+  }
+  return total / 10e7;
+};
+
+getRansomTotal = (addresses, minimum) => {
+  let ransomTotal = 0;
+  for (address of addresses) {
+    ransomTotal += getBalance(address, minimum);
+  }
+  return ransomTotal;
+};
+
+getBalances = range => {
+  minimum = 0;
+  if (range == 'day') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24;
+  } else if (range == 'week') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 7;
+  } else if (range == 'month') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 30;
+  } else if (range == 'year') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
+  }
+
   apiRequest('GET', 'list')
     .then(res => {
-      let addresses = res.result;
+      addresses = res.result;
       console.log(res.result);
-      ransomTotal = 0;
-      for (address of addresses) {
-        ransomTotal += address.balance;
-      }
-      ransomTotal /= 10e7;
+      ransomTotal = getRansomTotal(addresses, minimum);
       updateBitcoinPrice();
-      plotBalances(addresses);
+      plotBalances(addresses, minimum);
     })
     .catch(err => console.log(err));
 };
 
-plotBalances = data => {
+plotBalances = (data, minimum) => {
   mapping = {};
   for (let address of data) {
     if (!(address.variant in mapping)) {
       mapping[address.variant] = 0;
     }
-    mapping[address.variant] += address.balance / 10e7;
+    mapping[address.variant] += getBalance(address, minimum);
   }
   keyValues = [];
   for (var key in mapping) {
@@ -98,7 +125,10 @@ plotBalances = data => {
   keyValues.sort((a, b) => b[1] - a[1]);
   keyValues = keyValues.slice(0, 10);
   var ctx = document.getElementById('chart').getContext('2d');
-  var myChart = new Chart(ctx, {
+  if (chart) {
+    chart.destroy();
+  }
+  chart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: keyValues.map(a => a[0]),
@@ -124,12 +154,29 @@ plotBalances = data => {
   });
 };
 
+downloadFile = () => {
+  $('<a />', {
+    download: 'data.json',
+    href:
+      'data:application/json,' + encodeURIComponent(JSON.stringify(addresses))
+  })
+    .appendTo('body')
+    .click(function() {
+      $(this).remove();
+    })[0]
+    .click();
+};
+
 (function($) {
   $('#reportForm').submit(submitReport);
 
-  setInterval(updateBitcoinPrice, 60 * 1000);
+  $('#time-select')
+    .change(function() {
+      getBalances($('#time-select').val());
+    })
+    .change();
 
-  getBalances();
+  setInterval(updateBitcoinPrice, 60 * 1000);
 
   getReports('accepted', false);
 

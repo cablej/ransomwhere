@@ -19,7 +19,6 @@ const model = mongoose.model(
       variant: String,
       balance: Number,
       blockchain: String,
-      balances: [],
       transactions: [
         {
           hash: String,
