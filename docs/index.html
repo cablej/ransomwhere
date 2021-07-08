@@ -123,12 +123,12 @@
         </section>
         <div style="margin-top: 2em;" id="browse">
           <h2>Browse ransomware data</h2>
-          <div style="height:400px">
+          <div>
             <div class="chart-container" style="float:left"><canvas id="chart"></canvas>
             </div>
-            <div class="chart-container" style="float:right"><canvas id="chart2"></canvas>
-            </div>
-          </div><br><br>
+            <!-- <div class="chart-container" style="float:right"><canvas id="chart2"></canvas>
+            </div> -->
+          </div>
           <h3>Latest transactions</h3>
           <table id="transactions" class="display" style="width:100%">
             <thead>
@@ -208,6 +208,10 @@
             priority, and all
             elements of all reports will be publicly available. We will remove reports if we believe they are
             untruthful.</p>
+          <h3>How are dollar values calculated?</h3>
+          <p>Dollar values are calculated using the bitcoin exchange rate the day that the transaction was sent.
+            As a result, they serve as an approximate measure but are not necessarily the exact amount the criminals
+            sold the bitcoin for.</p>
         </div>
       </div>
     </div>

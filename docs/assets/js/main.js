@@ -10,7 +10,10 @@ let transactionsTable;
 let chart;
 let chart2;
 let addresses;
+let transactions;
 let topFamilies;
+let prices;
+let minimum;
 
 var numAnim = new countUp.CountUp('count', ransomTotal, {
   prefix: '$',
@@ -19,6 +22,30 @@ var numAnim = new countUp.CountUp('count', ransomTotal, {
 
 numAnim.update(100000000);
 
+formatDate = date => {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+};
+
+calculateDollarValue = transactions => {
+  let total = 0;
+  for (let tx of transactions) {
+    if (tx.time < minimum) continue;
+    date = formatDate(tx.time * 1000);
+    if (!(date in prices)) continue;
+    price = prices[date];
+    total += tx.amount * price;
+  }
+  return total;
+};
+
 toggleDollar = () => {
   dollarDisplay = !dollarDisplay;
   numAnim = new countUp.CountUp('count', ransomTotal, {
@@ -26,7 +53,7 @@ toggleDollar = () => {
     decimalPlaces: 2
   });
   if (dollarDisplay) {
-    numAnim.update(ransomTotal * bitcoinExchange);
+    numAnim.update(calculateDollarValue(transactions));
   } else {
     numAnim.update(ransomTotal);
   }
@@ -34,14 +61,16 @@ toggleDollar = () => {
 
 updateBitcoinPrice = () => {
   if (dollarDisplay) {
-    $.get('https://api.coinbase.com/v2/prices/spot?currency=USD').then(res => {
-      price = res.data.amount;
-      bitcoinExchange = price;
+    $.get(
+      'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
+    ).then(res => {
+      prices = JSON.parse(res).bpi;
       if (dollarDisplay) {
-        numAnim.update(ransomTotal * bitcoinExchange);
+        numAnim.update(calculateDollarValue(transactions));
       } else {
         numAnim.update(ransomTotal);
       }
+      plotBalances(addresses, minimum);
     });
   }
 };
@@ -72,7 +101,13 @@ submitReport = event => {
     });
 };
 
-getBalance = (address, minimum) => {
+getBalance = (address, minimum, currency) => {
+  if (currency == 'USD') {
+    return calculateDollarValue(
+      address.transactions.map(tx => ({ ...tx, amount: tx.amount / 10e7 })),
+      minimum
+    );
+  }
   let total = 0;
   for (transaction of address.transactions) {
     if (transaction.time > minimum) {
@@ -108,7 +143,6 @@ getBalances = range => {
       console.log(res.result);
       ransomTotal = getRansomTotal(addresses, minimum);
       updateBitcoinPrice();
-      plotBalances(addresses, minimum);
       transactions = addresses
         .map(address =>
           address.transactions.map(transaction => ({
@@ -120,7 +154,7 @@ getBalances = range => {
           }))
         )
         .flat();
-      plotTransactions(addresses, transactions, minimum);
+      // plotTransactions(addresses, transactions, minimum);
       updateTransactions(transactions);
     })
     .catch(err => console.log(err));
@@ -258,7 +292,7 @@ plotBalances = (data, minimum) => {
     if (!(address.family in mapping)) {
       mapping[address.family] = 0;
     }
-    mapping[address.family] += getBalance(address, minimum);
+    mapping[address.family] += getBalance(address, minimum, 'USD');
   }
   keyValues = [];
   for (var key in mapping) {
@@ -277,7 +311,7 @@ plotBalances = (data, minimum) => {
       labels: keyValues.map(a => a[0]),
       datasets: [
         {
-          label: 'Total payments (BTC)',
+          label: 'Total payments (USD)',
           data: keyValues.map(a => a[1]),
           backgroundColor: ['#373c70'],
           borderColor: ['#373c70'],
