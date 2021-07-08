@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const AWS = require('aws-sdk');
-var crypto = require('crypto');
 
 mongoose.connect(process.env.MONGO_URI);
 
