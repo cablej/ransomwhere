@@ -16,7 +16,7 @@ apiRequest = (method, endpoint, body, headers = {}) => {
 };
 
 getReports = (state = 'new', admin = false) => {
-  apiRequest('GET', `reports?state=${state}`)
+  apiRequest('POST', 'reports', { state })
     .then(res => {
       let reports = res.result;
       if (table) table.destroy();

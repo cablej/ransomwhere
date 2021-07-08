@@ -90,11 +90,10 @@ submitReport = event => {
 
       filename = Date.now() + file.name;
       body[mapping[i]] = filename;
-      apiRequest(
-        'GET',
-        's3?type=' + file.type + '&name=' + filename + '&size=' + file.size
-      ).then(res => {
-        console.log(res);
+      apiRequest('POST', 's3', {
+        type: file.type,
+        name: filename
+      }).then(res => {
         obj = res.result;
         $.ajax({
           url: obj.url,
@@ -107,9 +106,7 @@ submitReport = event => {
           },
           type: 'PUT',
           success: function(json, textStatus, jqXhr) {},
-          error: function(jqXhr, textStatus, errorThrown) {
-            console.log();
-          }
+          error: function(jqXhr, textStatus, errorThrown) {}
         });
       });
     }

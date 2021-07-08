@@ -20,9 +20,9 @@ module.exports.list = async event => {
 };
 
 module.exports.reports = async event => {
+  body = JSON.parse(event.body);
   state = 'accepted';
-  if (event.queryStringParameters && event.queryStringParameters.state)
-    state = event.queryStringParameters.state;
+  if (body.state) state = body.state;
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -77,9 +77,9 @@ module.exports.submit = async event => {
 };
 
 module.exports.getS3 = async event => {
-  console.log(JSON.stringify(event));
-  let type = event.queryStringParameters.type;
-  let name = event.queryStringParameters.name;
+  body = JSON.parse(event.body);
+  let type = body.type;
+  let name = body.name;
   const s3 = new AWS.S3();
   var putParams = {
     Bucket: 'ransomwhere',

@@ -38,7 +38,7 @@ functions:
     events:
       - http:
           path: reports
-          method: get
+          method: post
           cors: true
 
   getS3URL:
@@ -46,7 +46,7 @@ functions:
     events:
       - http:
           path: s3
-          method: get
+          method: post
           cors: true
 
   # updateReport:
