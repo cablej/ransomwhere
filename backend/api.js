@@ -77,7 +77,7 @@ module.exports.submit = async event => {
 };
 
 module.exports.getS3 = async event => {
-  console.log(event);
+  console.log(JSON.stringify(event));
   let type = event.queryStringParameters.type;
   let name = event.queryStringParameters.name;
   const s3 = new AWS.S3();
