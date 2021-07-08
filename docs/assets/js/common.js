@@ -64,7 +64,7 @@ getReports = (state = 'new', admin = false) => {
         rowId: '_id',
         columns,
         lengthChange: admin,
-        bFilter: admin,
+        bFilter: true,
         pageLength: admin ? 10 : 5,
         order: [[0, 'desc']]
       });

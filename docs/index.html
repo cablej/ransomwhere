@@ -62,8 +62,8 @@
       <div class="inner">
         <header>
           <h1 id="count" onclick="toggleDollar()" style="cursor: pointer;"></h1>
-          <h3 style="display: inline-block;">Total tracked ransomware payments <select class="inline-select"
-              id="time-select">
+          <h3 style="display: inline-block;">Total tracked ransomware payments <select
+              class="inline-select time-select">
               <option value="week">this week</option>
               <option value="month">this month</option>
               <option value="year">this year</option>
@@ -128,6 +128,14 @@
             </div>
             <!-- <div class="chart-container" style="float:right"><canvas id="chart2"></canvas>
             </div> -->
+            <center>
+              <p>Time range: <select class="inline-select time-select">
+                  <option value="week">this week</option>
+                  <option value="month">this month</option>
+                  <option value="year">this year</option>
+                  <option value="alltime" selected>all time</option>
+                </select></p>
+            </center>
           </div>
           <h3>Latest transactions</h3>
           <table id="transactions" class="display" style="width:100%">
@@ -140,7 +148,7 @@
                 <th>Hash</th>
               </tr>
             </thead>
-          </table>
+          </table><br><br>
           <h3>Latest reports</h3>
           <table id="reports" class="display" style="width:100%">
             <thead>

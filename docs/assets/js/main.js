@@ -140,7 +140,6 @@ getBalances = range => {
   apiRequest('GET', 'list')
     .then(res => {
       addresses = res.result;
-      console.log(res.result);
       ransomTotal = getRansomTotal(addresses, minimum);
       updateBitcoinPrice();
       transactions = addresses
@@ -347,9 +346,18 @@ downloadFile = () => {
 (function($) {
   $('#reportForm').submit(submitReport);
 
-  $('#time-select')
-    .change(function() {
-      getBalances($('#time-select').val());
+  var bothselects = $('#first-select, #second-select');
+
+  var isFirst = true;
+
+  $('.time-select')
+    .change(function(e) {
+      if (isFirst) {
+        isFirst = false;
+        return;
+      }
+      $('.time-select').val(this.value);
+      getBalances($('.time-select').val());
     })
     .change();
 
