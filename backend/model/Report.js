@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 const model = mongoose.model(
-  "Report",
+  'Report',
   new mongoose.Schema(
     {
       addresses: {
@@ -14,17 +14,21 @@ const model = mongoose.model(
         required: true,
         validate: {
           validator(addresses) {
-            return addresses.every((a) => validator.isAlphanumeric(a));
+            return addresses.every(a => validator.isAlphanumeric(a));
           }
         }
       },
       variant: String,
       amount: Number,
       screenshot: String,
-      approved: Boolean,
+      state: {
+        type: String,
+        enum: ['accepted', 'new', 'rejected'],
+        default: 'new'
+      },
       source: String,
       notes: String,
-      blockchain: { type: String, default: "bitcoin" }
+      blockchain: { type: String, default: 'bitcoin' }
     },
     { timestamps: true }
   )

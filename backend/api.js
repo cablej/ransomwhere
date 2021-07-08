@@ -19,15 +19,32 @@ module.exports.list = async event => {
 };
 
 module.exports.reports = async event => {
+  state = 'accepted';
+  if (event.queryStringParameters && event.queryStringParameters.state)
+    state = event.queryStringParameters.state;
   return {
     statusCode: 200,
     body: JSON.stringify({
       result: await ReportModel.find({
-        approved:
-          event.queryStringParameters &&
-          event.queryStringParameters.approved == 'true'
+        state
       })
     }),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
+  };
+};
+
+module.exports.updateReport = async event => {
+  id = event.pathParameters.id;
+  body = JSON.parse(event.body);
+  await ReportModel.findByIdAndUpdate(id, {
+    state: body.state
+  });
+  return {
+    statusCode: 204,
+    body: JSON.stringify({}),
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
@@ -41,7 +58,6 @@ module.exports.submit = async event => {
     addresses: body.addresses,
     variant: body.variant,
     amount: body.amount,
-    approved: true,
     source: body.source,
     notes: body.notes
   });

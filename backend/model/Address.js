@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 const model = mongoose.model(
-  "Address",
+  'Address',
   new mongoose.Schema(
     {
       address: {
@@ -19,7 +19,14 @@ const model = mongoose.model(
       variant: String,
       balance: Number,
       blockchain: String,
-      balances: []
+      balances: [],
+      transactions: [
+        {
+          hash: String,
+          time: Number,
+          amount: Number
+        }
+      ]
     },
     { timestamps: true }
   )

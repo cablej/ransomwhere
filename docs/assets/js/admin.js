@@ -5,42 +5,23 @@ var API_URL = 'http://localhost:3000/dev/';
 
 // var API_URL = "https://api.ransomwhe.re/";
 
-apiRequest = (method, endpoint, body) => {
-  return $.ajax({
-    type: method,
-    data: JSON.stringify(body),
-    url: API_URL + endpoint,
-    contentType: 'application/json',
-    dataType: 'json'
-  });
-};
+let table;
 
-getReports = () => {
-  apiRequest('GET', 'reports?approved=true')
+updateReport = (id, state) => {
+  apiRequest('POST', 'reports/' + id, { state })
     .then(res => {
-      let reports = res.result;
-      console.log(reports);
-      // reports = reports.map(report => [
-      //   report.id,
-      //   report.variant,
-      //   report.approved,
-      //   report.amount,
-      //   report.addresses.join(', ')
-      // ]);
-      $('#reports').DataTable({
-        data: reports,
-        columns: [
-          { title: 'id', data: '_id' },
-          { title: 'variant', data: 'variant' },
-          { title: 'approved', data: 'approved' },
-          { title: 'amount', data: 'amount' },
-          { title: 'addresses', data: col => col.addresses.join(', ') }
-        ]
-      });
+      table
+        .row('#' + id)
+        .remove()
+        .draw();
     })
     .catch(err => console.log(err));
 };
 
 (function($) {
-  getReports();
+  $('#state-select')
+    .change(function() {
+      getReports($('#state-select').val(), true);
+    })
+    .change();
 })(jQuery);

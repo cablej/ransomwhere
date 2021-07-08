@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="../docs/assets/css/main.css" />
   <link rel="stylesheet" href="../docs/assets/css/jquery-ui.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="../docs/assets/css/jquery.dataTables.min.css" />
   <link rel="shortcut icon" type="image/x-icon" href="../docs/favicon.ico">
   <noscript>
     <link rel="stylesheet" href="../docs/assets/css/noscript.css" />
@@ -28,7 +28,8 @@
       <div class="inner">
         <!-- Logo -->
         <a href="../docs/index.html" class="logo">
-          <span class="symbol"><img src="../docs/images/lock.png" alt="" /></span><span class="title">Ransomwhere</span>
+          <span class="symbol"><img src="../docs/assets/images/lock.png" alt="" /></span><span
+            class="title">Ransomwhere</span>
         </a>
 
         <!-- Nav -->
@@ -73,14 +74,19 @@
           <table id="reports" class="display" style="width:100%">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
+                <th>Action</th>
+                <th>Created</th>
+                <th>Variant</th>
+                <th>Addresses</th>
+                <th>Source</th>
               </tr>
             </thead>
           </table>
+          <h3>Report state:<select class="inline-select" id="state-select">
+              <option value="new">New</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select></h3>
         </div>
       </div>
     </div>
@@ -119,7 +125,7 @@
   <script src="../docs/assets/js/jquery-ui.min.js"></script>
   <script src="../docs/assets/js/chart.min.js"></script>
   <script src="../docs/assets/js/browser.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+  <script src="../docs/assets/js/jquery.dataTables.min.js"></script>
   <script src="../docs/assets/js/breakpoints.min.js"></script>
   <script src="../docs/assets/js/util.js"></script>
   <script src="../docs/assets/js/common.js"></script>

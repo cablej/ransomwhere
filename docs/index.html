@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="assets/css/main.css" />
   <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+  <link rel="stylesheet" href="assets/css/jquery.dataTables.min.css" />
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <noscript>
     <link rel="stylesheet" href="assets/css/noscript.css" />
@@ -31,7 +32,7 @@
 
         <!-- Logo -->
         <a href="index.html" class="logo">
-          <span class="symbol"><img src="images/lock.png" alt="" /></span><span class="title">Ransomwhere</span>
+          <span class="symbol"><img src="assets/images/lock.png" alt="" /></span><span class="title">Ransomwhere</span>
         </a>
 
         <!-- Nav -->
@@ -76,7 +77,7 @@
         <section class="tiles">
           <article class="style1">
             <span class="image">
-              <img src="images/pic08.jpg" alt="" />
+              <img src="assets/images/pic08.jpg" alt="" />
             </span>
             <a href="#browse">
               <h2>Browse Data</h2>
@@ -87,7 +88,7 @@
           </article>
           <article class="style2">
             <span class="image">
-              <img src="images/pic01.jpg" alt="" />
+              <img src="assets/images/pic01.jpg" alt="" />
             </span>
             <a href="#report">
               <h2>Report Addresses</h2>
@@ -98,7 +99,7 @@
           </article>
           <article class="style3">
             <span class="image">
-              <img src="images/pic04.jpg" alt="" />
+              <img src="assets/images/pic04.jpg" alt="" />
             </span>
             <a href="#download">
               <h2>Download Data</h2>
@@ -109,7 +110,7 @@
           </article>
           <article class="style4">
             <span class="image">
-              <img src="images/pic15.jpg" alt="" />
+              <img src="assets/images/pic15.jpg" alt="" />
             </span>
             <a href="#faq">
               <h2>FAQ</h2>
@@ -124,7 +125,27 @@
           <div class="chart-container"><canvas id="chart"></canvas>
           </div>
           <h3>Latest transactions</h3>
+          <table id="transactions" class="display" style="width:100%">
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Time</th>
+                <th>Amount</th>
+                <th>Hash</th>
+              </tr>
+            </thead>
+          </table>
           <h3>Latest reports</h3>
+          <table id="reports" class="display" style="width:100%">
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Variant</th>
+                <th>Addresses</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+          </table>
         </div>
         <div style="margin-top: 2em;" id="report">
           <h2>Report ransomware addresses</h2>
@@ -217,6 +238,7 @@
   <script src="assets/js/jquery-ui.min.js"></script>
   <script src="assets/js/chart.min.js"></script>
   <script src="assets/js/browser.min.js"></script>
+  <script src="assets/js/jquery.dataTables.min.js"></script>
   <script src="assets/js/breakpoints.min.js"></script>
   <script src="assets/js/util.js"></script>
   <script src="assets/js/common.js"></script>

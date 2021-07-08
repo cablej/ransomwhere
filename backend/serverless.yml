@@ -41,6 +41,14 @@ functions:
           method: get
           cors: true
 
+  # updateReport:
+  #   handler: api.updateReport
+  #   events:
+  #     - http:
+  #         path: reports/{id}
+  #         method: post
+  #         cors: true
+
   update:
     handler: cron.update
 

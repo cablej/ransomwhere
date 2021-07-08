@@ -4,7 +4,76 @@
 	License: pixelarity.com/license
 */
 
+apiRequest = (method, endpoint, body, headers = {}) => {
+  return $.ajax({
+    type: method,
+    data: JSON.stringify(body),
+    url: API_URL + endpoint,
+    contentType: 'application/json',
+    dataType: 'json',
+    headers
+  });
+};
+
+getReports = (state = 'new', admin = false) => {
+  apiRequest('GET', `reports?state=${state}`)
+    .then(res => {
+      let reports = res.result;
+      if (table) table.destroy();
+      columns = [
+        {
+          title: 'Created',
+          data: 'createdAt',
+          type: 'datetime',
+          displayFormat: 'M/D/YYYY',
+          wireFormat: 'YYYY-MM-DD'
+        },
+        {
+          title: 'Variant',
+          data: 'variant',
+          render: $.fn.dataTable.render.text()
+        },
+        {
+          title: 'Addresses',
+          data: report => {
+            return report.addresses.length > 2
+              ? report.addresses.splice(0, 2).join(', ') + '…'
+              : report.addresses.join(', ');
+          },
+          render: $.fn.dataTable.render.text()
+        },
+        {
+          title: 'Source',
+          data: 'source',
+          render: $.fn.dataTable.render.text()
+        }
+      ];
+      if (admin) {
+        columns.unshift({
+          title: 'Action',
+          data: report =>
+            `<a onclick="updateReport('${
+              report._id
+            }', 'accepted')" class="button primary small">Approve</a> <a onclick="updateReport('${
+              report._id
+            }', 'rejected')" class="button small">Deny</a>`
+        });
+      }
+      table = $('#reports').DataTable({
+        data: reports,
+        rowId: '_id',
+        columns,
+        lengthChange: admin,
+        bFilter: admin,
+        pageLength: admin ? 10 : 5,
+        order: [[0, 'desc']]
+      });
+    })
+    .catch(err => console.log(err));
+};
+
 (function($) {
+  $.fn.dataTable.ext.errMode = 'none';
   var $window = $(window),
     $body = $('body');
 
