@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const AWS = require('aws-sdk');
+var crypto = require('crypto');
 
 mongoose.connect(process.env.MONGO_URI);
 
@@ -59,12 +62,48 @@ module.exports.submit = async event => {
     family: body.family,
     amount: body.amount,
     source: body.source,
-    notes: body.notes
+    notes: body.notes,
+    payment_page_url: body.payment_page_url,
+    ransom_note_url: body.ransom_note_url
   });
   return {
     statusCode: 200,
     body: JSON.stringify({
       result: report
+    }),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
+  };
+};
+
+module.exports.getS3 = async event => {
+  let type = event.queryStringParameters.type;
+  let name = event.queryStringParameters.name;
+  const s3 = new AWS.S3();
+  var putParams = {
+    Bucket: 'ransomwhere',
+    Key: name,
+    Expires: 60 * 5,
+    ContentType: type,
+    ACL: 'public-read',
+    Body: '',
+    ContentMD5: ''
+  };
+  let url = await s3.getSignedUrl('putObject', putParams);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result: {
+        awsAccessKeyId: process.env.accessKeyId,
+        s3bucket: 'ransomwhere',
+        s3key: name,
+        // s3policy: s3policy.policy,
+        // s3signature: s3policy.signature,
+        url: url
+      }
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',

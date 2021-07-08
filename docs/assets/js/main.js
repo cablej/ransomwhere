@@ -77,21 +77,53 @@ updateBitcoinPrice = () => {
 
 submitReport = event => {
   event.preventDefault();
-  addresses = $('#addresses')
+
+  body = {};
+
+  let mapping = ['payment_page_url', 'ransom_note_url'];
+  for (let i = 0; i < 2; i++) {
+    if ($('input[type=file]')[i].files.length > 0) {
+      body[mapping + ''];
+      var formdata = new FormData();
+      file = $('input[type=file]')[i].files[0];
+      formdata.append('file', file);
+
+      filename = Date.now() + file.name;
+      body[mapping[i]] = filename;
+      apiRequest(
+        'GET',
+        's3?type=' + file.type + '&name=' + filename + '&size=' + file.size
+      ).then(res => {
+        console.log(res);
+        obj = res.result;
+        $.ajax({
+          url: obj.url,
+          data: file,
+          processData: false,
+          contentType: file.type,
+          cache: false,
+          headers: {
+            'x-amz-acl': 'public-read'
+          },
+          type: 'PUT',
+          success: function(json, textStatus, jqXhr) {},
+          error: function(jqXhr, textStatus, errorThrown) {
+            console.log();
+          }
+        });
+      });
+    }
+  }
+
+  body.addresses = $('#addresses')
     .val()
     .split(/[\n,]+/);
-  family = $('#family').val();
-  amount = $('#amount').val();
-  source = $('#sourceLink').val();
-  notes = $('#notes').val();
+  body.family = $('#family').val();
+  body.amount = $('#amount').val();
+  body.source = $('#sourceLink').val();
+  body.notes = $('#notes').val();
 
-  apiRequest('POST', 'submit', {
-    addresses,
-    family,
-    amount,
-    source,
-    notes
-  })
+  apiRequest('POST', 'submit', body)
     .then(res => {
       $('#formResult').html('<br><br>Successfully submitted!');
     })

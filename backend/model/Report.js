@@ -20,7 +20,8 @@ const model = mongoose.model(
       },
       family: String,
       amount: Number,
-      screenshot: String,
+      ransom_note_url: String,
+      payment_page_url: String,
       state: {
         type: String,
         enum: ['accepted', 'new', 'rejected'],
