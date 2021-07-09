@@ -86,9 +86,7 @@ module.exports.getS3 = async event => {
     Key: name,
     Expires: 60 * 5,
     ContentType: type,
-    ACL: 'public-read',
-    Body: '',
-    ContentMD5: ''
+    ACL: 'public-read'
   };
   let url = await s3.getSignedUrl('putObject', putParams);
 

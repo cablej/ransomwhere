@@ -78,11 +78,16 @@ updateBitcoinPrice = () => {
 submitReport = event => {
   event.preventDefault();
 
+  $('#formResult').html('<br><br>Submitting...');
+
   body = {};
 
   let mapping = ['payment_page_url', 'ransom_note_url'];
+  numFiles = 0;
+  numCompleted = 0;
   for (let i = 0; i < 2; i++) {
     if ($('input[type=file]')[i].files.length > 0) {
+      numFiles += 1;
       body[mapping + ''];
       var formdata = new FormData();
       file = $('input[type=file]')[i].files[0];
@@ -105,13 +110,24 @@ submitReport = event => {
             'x-amz-acl': 'public-read'
           },
           type: 'PUT',
-          success: function(json, textStatus, jqXhr) {},
-          error: function(jqXhr, textStatus, errorThrown) {}
+          success: function(json, textStatus, jqXhr) {
+            numCompleted += 1;
+            if (numCompleted == numFiles) {
+              sendReportRequest();
+            }
+          },
+          error: function(jqXhr, textStatus, errorThrown) {
+            alert('Error submitting, please try again.');
+          }
         });
       });
     }
   }
 
+  if (numFiles == 0) sendReportRequest();
+};
+
+sendReportRequest = () => {
   body.addresses = $('#addresses')
     .val()
     .split(/[\n,]+/);
@@ -122,12 +138,14 @@ submitReport = event => {
 
   apiRequest('POST', 'submit', body)
     .then(res => {
-      $('#formResult').html('<br><br>Successfully submitted!');
+      alert('Successfully submitted!');
+      $('#reportForm')[0].reset();
     })
     .catch(err => {
+      alert('Error submitting, please try again.');
       console.log(err);
-      $('#formResult').html('<br><br>Error submitting, please try again.');
     });
+  $('#formResult').html('');
 };
 
 getBalance = (address, minimum, currency) => {
@@ -320,7 +338,7 @@ plotBalances = (data, minimum) => {
     if (!(address.family in mapping)) {
       mapping[address.family] = 0;
     }
-    mapping[address.family] += getBalance(address, minimum, 'USD');
+    mapping[address.family] += getBalance(address, minimum);
   }
   keyValues = [];
   for (var key in mapping) {
