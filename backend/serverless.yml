@@ -41,13 +41,13 @@ functions:
           method: post
           cors: true
 
-  getS3URL:
-    handler: api.getS3
-    events:
-      - http:
-          path: s3
-          method: post
-          cors: true
+  # getS3URL:
+  #   handler: api.getS3
+  #   events:
+  #     - http:
+  #         path: s3
+  #         method: post
+  #         cors: true
 
   # updateReport:
   #   handler: api.updateReport
@@ -59,6 +59,8 @@ functions:
 
   update:
     handler: cron.update
+    events:
+      - schedule: rate(1 hour)
 
   import:
     handler: cron.import
