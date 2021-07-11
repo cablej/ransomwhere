@@ -141,12 +141,13 @@ sendReportRequest = () => {
     .then(res => {
       alert('Successfully submitted!');
       $('#reportForm')[0].reset();
+      $('#formResult').html('');
     })
     .catch(err => {
       alert('Error submitting, please try again.');
       console.log(err);
+      $('#formResult').html('');
     });
-  $('#formResult').html('');
 };
 
 getBalance = (address, minimum, currency) => {
