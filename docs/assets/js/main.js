@@ -340,7 +340,7 @@ plotBalances = (data, minimum) => {
     if (!(address.family in mapping)) {
       mapping[address.family] = 0;
     }
-    mapping[address.family] += getBalance(address, minimum);
+    mapping[address.family] += getBalance(address, minimum, (currency = 'USD'));
   }
   keyValues = [];
   for (var key in mapping) {
