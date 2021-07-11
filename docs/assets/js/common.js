@@ -4,6 +4,8 @@
 	License: pixelarity.com/license
 */
 
+let S3_URL = 'https://ransomwhere.s3.amazonaws.com/';
+
 apiRequest = (method, endpoint, body, headers = {}) => {
   return $.ajax({
     type: method,
@@ -44,7 +46,14 @@ getReports = (state = 'new', admin = false) => {
         },
         {
           title: 'Source',
-          data: 'source',
+          data: report => {
+            if (report.source) return report.source;
+            else if (report.payment_page_url)
+              return S3_URL + report.payment_page_url;
+            else if (report.ransom_note_url)
+              return S3_URL + report.ransom_note_url;
+            return '';
+          },
           render: $.fn.dataTable.render.text()
         }
       ];
