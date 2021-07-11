@@ -84,7 +84,7 @@ module.exports.getS3 = async event => {
   var putParams = {
     Bucket: 'ransomwhere',
     Key: name,
-    Expires: 60 * 5,
+    Expires: 60 * 60 * 24,
     ContentType: type,
     ACL: 'public-read'
   };

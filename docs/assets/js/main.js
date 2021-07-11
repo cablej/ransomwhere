@@ -101,7 +101,7 @@ submitReport = event => {
       }).then(res => {
         obj = res.result;
         $.ajax({
-          url: decodeURIComponent(obj.url),
+          url: obj.url,
           data: file,
           processData: false,
           contentType: file.type,
