@@ -96,31 +96,34 @@ submitReport = event => {
       filename = Date.now() + file.name;
       body[mapping[i]] = filename;
       apiRequest('POST', 's3', {
-        type: file.type,
-        name: filename
-      }).then(res => {
-        obj = res.result;
-        $.ajax({
           url: obj.url,
-          data: file,
-          processData: false,
-          contentType: file.type,
-          cache: false,
-          headers: {
-            'x-amz-acl': 'public-read'
-          },
-          type: 'PUT',
-          success: function(json, textStatus, jqXhr) {
-            numCompleted += 1;
-            if (numCompleted == numFiles) {
-              sendReportRequest();
-            }
-          },
-          error: function(jqXhr, textStatus, errorThrown) {
-            alert('Error submitting, please try again.');
+      // apiRequest('POST', 's3', {
+      //   type: file.type,
+      //   name: filename
+      // }).then(res => {
+      $.ajax({
+        url:
+          'https://ransomwhere.s3.amazonaws.com/' +
+          encodeURIComponent(filename),
+        data: file,
+        processData: false,
+        contentType: file.type,
+        cache: false,
+        // headers: {
+        //   'x-amz-acl': 'public-read'
+        // },
+        type: 'PUT',
+        success: function(json, textStatus, jqXhr) {
+          numCompleted += 1;
+          if (numCompleted == numFiles) {
+            sendReportRequest();
           }
-        });
+        },
+        error: function(jqXhr, textStatus, errorThrown) {
+          alert('Error submitting, please try again.');
+        }
       });
+      // });
     }
   }
 

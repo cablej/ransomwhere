@@ -4,6 +4,13 @@ const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
 const AWS = require('aws-sdk');
 
+// AWS.config = new AWS.Config();
+// AWS.config.update({
+//   accessKeyId: process.env.aws_access_key_id,
+//   secretAccessKey: process.env.aws_secret_access_key,
+//   region: 'us-east-1'
+// });
+
 mongoose.connect(process.env.MONGO_URI);
 
 module.exports.list = async event => {
@@ -94,11 +101,9 @@ module.exports.getS3 = async event => {
     statusCode: 200,
     body: JSON.stringify({
       result: {
-        awsAccessKeyId: process.env.accessKeyId,
+        awsAccessKeyId: process.env.aws_access_key_id,
         s3bucket: 'ransomwhere',
         s3key: name,
-        // s3policy: s3policy.policy,
-        // s3signature: s3policy.signature,
         url: url
       }
     }),
