@@ -95,8 +95,6 @@ submitReport = event => {
 
       filename = Date.now() + file.name;
       body[mapping[i]] = filename;
-      apiRequest('POST', 's3', {
-          url: obj.url,
       // apiRequest('POST', 's3', {
       //   type: file.type,
       //   name: filename
