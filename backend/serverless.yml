@@ -25,6 +25,7 @@ functions:
           path: list
           method: get
           cors: true
+
   submit:
     handler: api.submit
     events:
@@ -49,16 +50,17 @@ functions:
   #         method: post
   #         cors: true
 
-  # updateReport:
-  #   handler: api.updateReport
-  #   events:
-  #     - http:
-  #         path: reports/{id}
-  #         method: post
-  #         cors: true
+  updateReport:
+    handler: api.updateReport
+    events:
+      - http:
+          path: reports/{id}
+          method: post
+          cors: true
 
   update:
     handler: cron.update
+    timeout: 1500
     events:
       - schedule: rate(1 hour)
 
