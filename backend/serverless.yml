@@ -60,7 +60,7 @@ functions:
 
   update:
     handler: cron.update
-    timeout: 1500
+    timeout: 900
     events:
       - schedule: rate(1 hour)
 
