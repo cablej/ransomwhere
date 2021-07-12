@@ -209,13 +209,17 @@
           <h2>Download data</h2>
           <a class="button secondary" onclick="downloadFile()">Download all data</a>
         </div>
-        <div style="margin-top: 2em;" id="faq">
+        <div style="margin-top: 2em;" class="no-margin" id="faq">
           <h2>FAQ</h2>
           <h3>Why track ransomware payments?</h3>
           <p>Transparency is crucially needed in assessing the spread of ransomware and the efficacy of
-            mitigations. Fortunately, due to the transparent nature of Bitcoin, it's trivial to track payments with
+            mitigations. Fortunately, due to the transparent nature of Bitcoin, it's easy to track payments with
             knowledge of receipt addresses. By crowdsourcing ransomware payment addresses, we hope to provide an open
             resource for the security community and the public.</p>
+          <h3>How complete is the data?</h3>
+          <p>As Ransomwhere is new, we are still working on building out our dataset. Reports have placed total
+            ransomware revenue in 2020 at up to <a
+              href="https://blog.chainalysis.com/reports/ransomware-ecosystem-crypto-crime-2021">$350 million</a>.</p>
           <h3>Can't someone fake a report?</h3>
           <p>While it's impossible to verify with complete certainty that a report is accurate, we aim to utilize the
             wisdom of the crowds to
@@ -229,6 +233,14 @@
           <p>Dollar values are calculated using the bitcoin exchange rate the day that the transaction was sent.
             As a result, they serve as an approximate measure but are not necessarily the exact amount the criminals
             sold the bitcoin for.</p>
+          <h3>Do you have an API?</h3>
+          <p>Yes, Ransomwhere has a public API. The most basic endpoint is <code>https://api.ransomwhe.re/list</code> to
+            receive all past transactions. We are working on further documenting the API.</p>
+          <h3>How can I help out?</h3>
+          <p>We are always open to collaboration! Beyond submitting reports, please <a
+              href="mailto:ransomwhere@lightningsecurity.io">email us</a> if you are interested in further
+            collaboration. If you are interested in contributing to code, feel free to check out <a
+              href="https://github.com/cablej/ransomwhere">our GitHub repository</a>.</p>
         </div>
       </div>
     </div>

@@ -12,6 +12,10 @@
   height: 400px;
 }
 
+.no-margin h3 {
+  margin: 0;
+}
+
 .paper {
   border: 1px solid lightgray;
   padding: 25px;
