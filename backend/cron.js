@@ -4,17 +4,18 @@ const AddressModel = require('./model/Address.js');
 const axios = require('axios');
 const lodash = require('lodash');
 const fs = require('fs');
-const { reduce } = require('lodash');
+const { validate } = require('bitcoin-address-validation');
 
 mongoose.set('useFindAndModify', false);
 
-CHUNK_SIZE = 50;
+CHUNK_SIZE = 100;
 
 // Fetch all report addresses, deduplicate, and fetch bitcoin balances
 module.exports.update = async event => {
   mongoose.connect(process.env.MONGO_URI);
-  reports = await ReportModel.find({
+  let reports = await ReportModel.find({
     state: 'accepted'
+    // createdAt: { $gte: Date.now() - 24 * 60 * 60 * 1000 }
   });
 
   let addressesMap = {};
@@ -25,8 +26,12 @@ module.exports.update = async event => {
         addressesMap[address].family != report.family
       ) {
         console.warn(
-          'Same address associated with mutliple familys: ' + address
+          'Same address associated with mutliple families: ' + address
         );
+        continue;
+      }
+      if (!validate(address)) {
+        console.warn('Invalid bitcoin address: ' + address);
         continue;
       }
       addressesMap[address] = {
@@ -57,7 +62,7 @@ module.exports.update = async event => {
         // fs.writeFileSync('out.json', JSON.stringify(res.data));
         // console.log(res.data);
       } catch (e) {
-        console.error(e);
+        console.error(e.response);
         continue;
       }
       if (!addresses) {
@@ -80,7 +85,7 @@ module.exports.update = async event => {
       }
       offset += limit;
       // Rate limit
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 5000));
     }
     for (let addressResp of addresses) {
       let balance = addressResp.total_received;
@@ -102,7 +107,7 @@ module.exports.update = async event => {
     }
 
     // Rate limit
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 5000));
   }
 
   console.log(
@@ -112,11 +117,11 @@ module.exports.update = async event => {
   mongoose.connection.close();
 };
 
-module.exports.import = async event => {
+importOTX = async event => {
   mongoose.connect(process.env.MONGO_URI);
   let limit = 100;
   let page = 0;
-  reports = {};
+  let reports = {};
   // reports = JSON.parse(fs.readFileSync('out.json', 'utf8'));
   while (true) {
     try {
@@ -184,4 +189,44 @@ module.exports.import = async event => {
     await ReportModel.create(reportObj);
   }
   mongoose.connection.close();
+};
+
+importCSV = async event => {
+  let csv = fs.readFileSync(
+    '/Users/cablej/Downloads/seed_addresses.csv',
+    'utf8'
+  );
+  let lines = csv.split(/\r?\n/);
+  let reports = {};
+  let mappings = {
+    Sam: 'SamSam'
+  };
+  for (line of lines) {
+    if (line == '') continue;
+    let [address, family, source] = line.split(',');
+    if (family == 'Family') continue;
+    if (!(family in reports)) reports[family] = new Set();
+    reports[family].add(address);
+  }
+  mongoose.connect(process.env.MONGO_URI);
+  for (let family in reports) {
+    reportObj = {
+      family,
+      notes: '',
+      state: 'accepted',
+      source: 'https://github.com/behas/ransomware-analytics',
+      addresses: Array.from(reports[family])
+    };
+    console.log(reportObj);
+    await ReportModel.create(reportObj);
+  }
+  mongoose.connection.close();
+};
+
+module.exports.import = async event => {
+  if (event.type == 'csv') {
+    importCSV(event);
+  } else if (event.type == 'otx') {
+    importOTX(event);
+  }
 };

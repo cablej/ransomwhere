@@ -5,6 +5,7 @@
   "dependencies": {
     "aws-sdk": "^2.931.0",
     "axios": "^0.21.1",
+    "bitcoin-address-validation": "^2.1.0",
     "lodash": "^4.17.21",
     "mongoose": "^5.12.14",
     "serverless": "^2.47.0",
