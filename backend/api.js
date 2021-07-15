@@ -17,7 +17,7 @@ module.exports.list = async event => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: await AddressModel.find()
+      result: await AddressModel.find().select('-_id -transactions._id -__v')
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
