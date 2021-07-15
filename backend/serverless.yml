@@ -24,7 +24,19 @@ functions:
       - http:
           path: list
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            allowCredentials: true
+            cacheControl: 'public, max-age=600'
+            maxAge: 600
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Cache-Control
 
   export:
     handler: api.exportAll
@@ -32,7 +44,19 @@ functions:
       - http:
           path: export
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            allowCredentials: true
+            cacheControl: 'public, max-age=600'
+            maxAge: 600
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Cache-Control
 
   submit:
     handler: api.submit
