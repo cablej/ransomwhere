@@ -26,7 +26,7 @@ formatDate = date => {
   return [year, month, day].join('-');
 };
 
-calculateValue = (transactions, prices, minimum) => {
+calculateValue = (transactions, prices, minimum, adjust) => {
   let usdTotal = 0;
   let btcTotal = 0;
   for (let tx of transactions) {
@@ -34,7 +34,7 @@ calculateValue = (transactions, prices, minimum) => {
     date = formatDate(tx.time * 1000);
     if (!(date in prices)) continue;
     price = prices[date];
-    let amount = tx.amount / 1e8;
+    let amount = adjust ? tx.amount / 1e8 : tx.amount;
     usdTotal += amount * price;
     btcTotal += amount;
   }
@@ -70,12 +70,17 @@ module.exports.list = async event => {
         family: address.family,
         hash: transaction.hash,
         time: transaction.time,
-        amount: transaction.amount
+        amount: transaction.amount / 1e8
       }))
     )
     .flat();
 
-  let [usdTotal, btcTotal] = calculateValue(transactions, prices, minimum);
+  let [usdTotal, btcTotal] = calculateValue(
+    transactions,
+    prices,
+    minimum,
+    false
+  );
 
   mapping = {};
   for (let address of addresses) {
@@ -85,7 +90,8 @@ module.exports.list = async event => {
     let [usdVal, btcVal] = calculateValue(
       address.transactions,
       prices,
-      minimum
+      minimum,
+      true
     );
     mapping[address.family] += usdVal;
   }
