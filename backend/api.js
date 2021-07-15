@@ -100,7 +100,8 @@ module.exports.list = async event => {
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
+      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Headers': '*'
     }
   };
 };
@@ -116,7 +117,8 @@ module.exports.exportAll = async event => {
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
+      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Headers': '*'
     }
   };
 };
