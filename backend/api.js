@@ -14,10 +14,20 @@ const AWS = require('aws-sdk');
 mongoose.connect(process.env.MONGO_URI);
 
 module.exports.list = async event => {
+  let addresses = await AddressModel.find().select(
+    '-_id -transactions._id -__v'
+  );
+  let toRet = [];
+  for (let address of addresses) {
+    address.transactions = address.transactions.filter(
+      tx => tx.amount >= 0.01 * 1e8
+    );
+    if (address.transactions.length > 0) toRet.push(address);
+  }
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: await AddressModel.find().select('-_id -transactions._id -__v')
+      result: toRet
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
