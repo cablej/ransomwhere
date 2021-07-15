@@ -7,6 +7,9 @@
 let S3_URL = 'https://ransomwhere.s3.amazonaws.com/';
 
 apiRequest = (method, endpoint, body, headers = {}) => {
+  if (method == 'GET') {
+    headers['Cache-Control'] = 'public, max-age=600';
+  }
   return $.ajax({
     type: method,
     data: JSON.stringify(body),

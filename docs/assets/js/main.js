@@ -9,42 +9,16 @@ let table;
 let transactionsTable;
 let chart;
 let chart2;
-let addresses;
 let transactions;
-let topFamilies;
-let prices;
-let minimum;
+let usdTotal_;
+let btcTotal_;
 
 var numAnim = new countUp.CountUp('count', ransomTotal, {
   prefix: '$',
   decimalPlaces: 2
 });
 
-numAnim.update(56880381.92);
-
-formatDate = date => {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('-');
-};
-
-calculateDollarValue = transactions => {
-  let total = 0;
-  for (let tx of transactions) {
-    if (tx.time < minimum) continue;
-    date = formatDate(tx.time * 1000);
-    if (!(date in prices)) continue;
-    price = prices[date];
-    total += tx.amount * price;
-  }
-  return total;
-};
+numAnim.update(91787705.66);
 
 toggleDollar = () => {
   dollarDisplay = !dollarDisplay;
@@ -53,25 +27,9 @@ toggleDollar = () => {
     decimalPlaces: 2
   });
   if (dollarDisplay) {
-    numAnim.update(calculateDollarValue(transactions));
+    numAnim.update(usdTotal_);
   } else {
-    numAnim.update(ransomTotal);
-  }
-};
-
-updateBitcoinPrice = () => {
-  if (dollarDisplay) {
-    $.get(
-      'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
-    ).then(res => {
-      prices = JSON.parse(res).bpi;
-      if (dollarDisplay) {
-        numAnim.update(calculateDollarValue(transactions));
-      } else {
-        numAnim.update(ransomTotal);
-      }
-      plotBalances(addresses, minimum);
-    });
+    numAnim.update(btcTotal_);
   }
 };
 
@@ -150,59 +108,15 @@ sendReportRequest = () => {
     });
 };
 
-getBalance = (address, minimum, currency) => {
-  if (currency == 'USD') {
-    return calculateDollarValue(
-      address.transactions.map(tx => ({ ...tx, amount: tx.amount / 10e7 })),
-      minimum
-    );
-  }
-  let total = 0;
-  for (transaction of address.transactions) {
-    if (transaction.time > minimum) {
-      total += transaction.amount;
-    }
-  }
-  return total / 10e7;
-};
-
-getRansomTotal = (addresses, minimum) => {
-  let ransomTotal = 0;
-  for (address of addresses) {
-    ransomTotal += getBalance(address, minimum);
-  }
-  return ransomTotal;
-};
-
 getBalances = range => {
-  minimum = 0;
-  if (range == 'day') {
-    minimum = Date.now() / 1000 - 60 * 60 * 24;
-  } else if (range == 'week') {
-    minimum = Date.now() / 1000 - 60 * 60 * 24 * 7;
-  } else if (range == 'month') {
-    minimum = Date.now() / 1000 - 60 * 60 * 24 * 30;
-  } else if (range == 'year') {
-    minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
-  }
-
-  apiRequest('GET', 'list')
+  apiRequest('GET', 'list?range=' + range)
     .then(res => {
-      addresses = res.result;
-      ransomTotal = getRansomTotal(addresses, minimum);
-      updateBitcoinPrice();
-      transactions = addresses
-        .map(address =>
-          address.transactions.map(transaction => ({
-            address: address.address,
-            family: address.family,
-            hash: transaction.hash,
-            time: transaction.time,
-            amount: transaction.amount / 10e7
-          }))
-        )
-        .flat();
+      let { usdTotal, btcTotal, transactions, keyValues } = res;
+      usdTotal_ = usdTotal;
+      btcTotal_ = btcTotal;
       // plotTransactions(addresses, transactions, minimum);
+      numAnim.update(usdTotal);
+      plotBalances(keyValues);
       updateTransactions(transactions);
     })
     .catch(err => console.log(err));
@@ -334,21 +248,7 @@ plotTransactions = (addresses, transactions, minimum) => {
   });
 };
 
-plotBalances = (data, minimum) => {
-  mapping = {};
-  for (let address of data) {
-    if (!(address.family in mapping)) {
-      mapping[address.family] = 0;
-    }
-    mapping[address.family] += getBalance(address, minimum, (currency = 'USD'));
-  }
-  keyValues = [];
-  for (var key in mapping) {
-    keyValues.push([key, mapping[key]]);
-  }
-  keyValues.sort((a, b) => b[1] - a[1]);
-  keyValues = keyValues.slice(0, 10);
-  topFamilies = keyValues.map(a => a[0]);
+plotBalances = keyValues => {
   var ctx = document.getElementById('chart').getContext('2d');
   if (chart) {
     chart.destroy();
@@ -380,16 +280,21 @@ plotBalances = (data, minimum) => {
 };
 
 downloadFile = () => {
-  $('<a />', {
-    download: 'data.json',
-    href:
-      'data:application/json,' + encodeURIComponent(JSON.stringify(addresses))
-  })
-    .appendTo('body')
-    .click(function() {
-      $(this).remove();
-    })[0]
-    .click();
+  apiRequest('GET', 'export')
+    .then(res => {
+      $('<a />', {
+        download: 'data.json',
+        href:
+          'data:application/json,' +
+          encodeURIComponent(JSON.stringify(res.result))
+      })
+        .appendTo('body')
+        .click(function() {
+          $(this).remove();
+        })[0]
+        .click();
+    })
+    .catch(err => console.log(err));
 };
 
 (function($) {
@@ -407,8 +312,6 @@ downloadFile = () => {
       getBalances($('.time-select').val());
     })
     .change();
-
-  setInterval(updateBitcoinPrice, 60 * 1000);
 
   getReports('accepted', false);
 

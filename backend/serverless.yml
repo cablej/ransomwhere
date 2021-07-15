@@ -26,6 +26,14 @@ functions:
           method: get
           cors: true
 
+  export:
+    handler: api.exportAll
+    events:
+      - http:
+          path: export
+          method: get
+          cors: true
+
   submit:
     handler: api.submit
     events:

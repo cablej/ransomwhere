@@ -3,6 +3,7 @@ const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
 const AWS = require('aws-sdk');
+const axios = require('axios');
 
 // AWS.config = new AWS.Config();
 // AWS.config.update({
@@ -13,21 +14,105 @@ const AWS = require('aws-sdk');
 
 mongoose.connect(process.env.MONGO_URI);
 
+formatDate = date => {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+};
+
+calculateValue = (transactions, prices, minimum) => {
+  let usdTotal = 0;
+  let btcTotal = 0;
+  for (let tx of transactions) {
+    if (tx.time < minimum) continue;
+    date = formatDate(tx.time * 1000);
+    if (!(date in prices)) continue;
+    price = prices[date];
+    let amount = tx.amount / 1e8;
+    usdTotal += amount * price;
+    btcTotal += amount;
+  }
+  return [usdTotal, btcTotal];
+};
+
 module.exports.list = async event => {
   let addresses = await AddressModel.find().select(
     '-_id -transactions._id -__v'
   );
-  let toRet = [];
-  for (let address of addresses) {
-    address.transactions = address.transactions.filter(
-      tx => tx.amount >= 0.01 * 1e8
-    );
-    if (address.transactions.length > 0) toRet.push(address);
+
+  let res = await axios.get(
+    'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
+  );
+  let prices = res.data.bpi;
+  let range = event.queryStringParameters.range;
+
+  let minimum = 0;
+  if (range == 'day') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24;
+  } else if (range == 'week') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 7;
+  } else if (range == 'month') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 30;
+  } else if (range == 'year') {
+    minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
   }
+
+  let usdTotal = 0;
+  let btcTotal = 0;
+  for (let address of addresses) {
+    let [usd, btc] = calculateValue(address.transactions, prices, minimum);
+    usdTotal += usd;
+    btcTotal += btc;
+  }
+
+  mapping = {};
+  for (let address of addresses) {
+    if (!(address.family in mapping)) {
+      mapping[address.family] = 0;
+    }
+    let [usdVal, btcVal] = calculateValue(
+      address.transactions,
+      prices,
+      minimum
+    );
+    mapping[address.family] += usdVal;
+  }
+  keyValues = [];
+  for (var key in mapping) {
+    keyValues.push([key, mapping[key]]);
+  }
+  keyValues.sort((a, b) => b[1] - a[1]);
+  keyValues = keyValues.slice(0, 10);
+
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: toRet
+      usdTotal,
+      btcTotal,
+      transactions,
+      keyValues
+    }),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
+  };
+};
+
+module.exports.exportAll = async event => {
+  let addresses = await AddressModel.find().select(
+    '-_id -transactions._id -__v'
+  );
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      result: addresses
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
