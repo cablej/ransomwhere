@@ -63,13 +63,19 @@ module.exports.list = async event => {
     minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
   }
 
-  let usdTotal = 0;
-  let btcTotal = 0;
-  for (let address of addresses) {
-    let [usd, btc] = calculateValue(address.transactions, prices, minimum);
-    usdTotal += usd;
-    btcTotal += btc;
-  }
+  let transactions = addresses
+    .map(address =>
+      address.transactions.map(transaction => ({
+        address: address.address,
+        family: address.family,
+        hash: transaction.hash,
+        time: transaction.time,
+        amount: transaction.amount
+      }))
+    )
+    .flat();
+
+  let [usdTotal, btcTotal] = calculateValue(transactions, prices, minimum);
 
   mapping = {};
   for (let address of addresses) {
