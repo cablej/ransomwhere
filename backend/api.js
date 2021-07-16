@@ -107,7 +107,7 @@ module.exports.list = async event => {
     body: JSON.stringify({
       usdTotal,
       btcTotal,
-      transactions: transactions.slice(0, 100),
+      transactions: transactions.sort((a, b) => b.time - a.time).slice(0, 100),
       keyValues
     }),
     headers: {

@@ -14,10 +14,11 @@ CHUNK_SIZE = 100;
 module.exports.update = async event => {
   mongoose.connect(process.env.MONGO_URI);
   let reports = await ReportModel.find({
-    state: 'accepted'
-    // createdAt: { $gte: Date.now() - 24 * 60 * 60 * 1000 }
+    state: 'accepted',
+    createdAt: { $gte: Date.now() - 24 * 60 * 60 * 1000 }
   });
 
+  console.log('Starting for ' + reports.length + ' reports');
   let addressesMap = {};
   for (let report of reports) {
     for (let address of report.addresses) {
