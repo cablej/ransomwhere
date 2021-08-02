@@ -31,32 +31,12 @@ getReports = (state = 'new', admin = false) => {
           data: 'createdAt',
           type: 'datetime',
           displayFormat: 'M/D/YYYY',
-          wireFormat: 'YYYY-MM-DD'
+          wireFormat: 'YYYY-MM-DD',
+          adminOnly: false
         },
         {
           title: 'Family',
           data: 'family',
-          render: $.fn.dataTable.render.text()
-        },
-        {
-          title: 'Addresses',
-          data: report => {
-            return report.addresses.length > 2
-              ? report.addresses.splice(0, 2).join(', ') + '…'
-              : report.addresses.join(', ');
-          },
-          render: $.fn.dataTable.render.text()
-        },
-        {
-          title: 'Source',
-          data: report => {
-            if (report.source) return report.source;
-            else if (report.payment_page_url)
-              return S3_URL + report.payment_page_url;
-            else if (report.ransom_note_url)
-              return S3_URL + report.ransom_note_url;
-            return '';
-          },
           render: $.fn.dataTable.render.text()
         }
       ];
@@ -69,6 +49,27 @@ getReports = (state = 'new', admin = false) => {
             }', 'accepted')" class="button primary small">Approve</a> <a onclick="updateReport('${
               report._id
             }', 'rejected')" class="button small">Deny</a>`
+        });
+        columns.push({
+          title: 'Addresses',
+          data: report => {
+            return report.addresses.length > 2
+              ? report.addresses.splice(0, 2).join(', ') + '…'
+              : report.addresses.join(', ');
+          },
+          render: $.fn.dataTable.render.text()
+        });
+        columns.push({
+          title: 'Source',
+          data: report => {
+            if (report.source) return report.source;
+            else if (report.payment_page_url)
+              return S3_URL + report.payment_page_url;
+            else if (report.ransom_note_url)
+              return S3_URL + report.ransom_note_url;
+            return '';
+          },
+          render: $.fn.dataTable.render.text()
         });
       }
       table = $('#reports').DataTable({

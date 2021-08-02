@@ -38,25 +38,25 @@ functions:
               - X-Amz-User-Agent
               - Cache-Control
 
-  export:
-    handler: api.exportAll
-    events:
-      - http:
-          path: export
-          method: get
-          cors:
-            origin: '*'
-            allowCredentials: true
-            cacheControl: 'public, max-age=600'
-            maxAge: 600
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Cache-Control
+  # export:
+  #   handler: api.exportAll
+  #   events:
+  #     - http:
+  #         path: export
+  #         method: get
+  #         cors:
+  #           origin: '*'
+  #           allowCredentials: true
+  #           cacheControl: 'public, max-age=600'
+  #           maxAge: 600
+  #           headers:
+  #             - Content-Type
+  #             - X-Amz-Date
+  #             - Authorization
+  #             - X-Api-Key
+  #             - X-Amz-Security-Token
+  #             - X-Amz-User-Agent
+  #             - Cache-Control
 
   submit:
     handler: api.submit
@@ -82,13 +82,13 @@ functions:
   #         method: post
   #         cors: true
 
-  updateReport:
-    handler: api.updateReport
-    events:
-      - http:
-          path: reports/{id}
-          method: post
-          cors: true
+  # updateReport:
+  #   handler: api.updateReport
+  #   events:
+  #     - http:
+  #         path: reports/{id}
+  #         method: post
+  #         cors: true
 
   update:
     handler: cron.update

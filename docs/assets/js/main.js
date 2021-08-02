@@ -117,7 +117,7 @@ getBalances = range => {
       // plotTransactions(addresses, transactions, minimum);
       numAnim.update(usdTotal);
       plotBalances(keyValues);
-      updateTransactions(transactions);
+      // updateTransactions(transactions);
     })
     .catch(err => console.log(err));
 };

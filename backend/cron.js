@@ -15,7 +15,7 @@ module.exports.update = async event => {
   mongoose.connect(process.env.MONGO_URI);
   let reports = await ReportModel.find({
     state: 'accepted',
-    createdAt: { $gte: Date.now() - 24 * 60 * 60 * 1000 }
+    // createdAt: { $gte: Date.now() - 24 * 60 * 60 * 1000 }
   });
 
   console.log('Starting for ' + reports.length + ' reports');
@@ -194,29 +194,35 @@ importOTX = async event => {
 
 importCSV = async event => {
   let csv = fs.readFileSync(
-    '/Users/cablej/Downloads/seed_addresses.csv',
+    '/Users/cablej/Downloads/bitcoinwhoswho.csv',
     'utf8'
   );
   let lines = csv.split(/\r?\n/);
   let reports = {};
   let mappings = {
+    SamSa: 'SamSam',
     Sam: 'SamSam'
   };
+  mongoose.connect(process.env.MONGO_URI);
   for (line of lines) {
     if (line == '') continue;
     let [address, family, source] = line.split(',');
     if (family == 'Family') continue;
+    if (family in mappings) family = mappings[family];
+    let exists = await AddressModel.exists({ address });
+    if (exists) continue;
     if (!(family in reports)) reports[family] = new Set();
-    reports[family].add(address);
+    reports[family].add({ address, source });
+    console.log(address);
   }
-  mongoose.connect(process.env.MONGO_URI);
   for (let family in reports) {
+    report = Array.from(reports[family]);
     reportObj = {
       family,
       notes: '',
-      state: 'accepted',
-      source: 'https://github.com/behas/ransomware-analytics',
-      addresses: Array.from(reports[family])
+      // state: 'accepted',
+      source: report[0].source,
+      addresses: Array.from(report.map(r => r.address))
     };
     console.log(reportObj);
     await ReportModel.create(reportObj);

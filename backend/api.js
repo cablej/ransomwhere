@@ -107,7 +107,7 @@ module.exports.list = async event => {
     body: JSON.stringify({
       usdTotal,
       btcTotal,
-      transactions: transactions.sort((a, b) => b.time - a.time).slice(0, 100),
+      // transactions: transactions.sort((a, b) => b.time - a.time).slice(0, 100),
       keyValues
     }),
     headers: {
@@ -144,7 +144,7 @@ module.exports.reports = async event => {
     body: JSON.stringify({
       result: await ReportModel.find({
         state
-      })
+      }).select('createdAt family')
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
