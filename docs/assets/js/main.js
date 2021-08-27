@@ -83,7 +83,15 @@ submitReport = event => {
     }
   }
 
-  if (numFiles == 0) sendReportRequest();
+  if (numFiles == 0) {
+    body.source = $('#sourceLink').val();
+    if (body.source === '') {
+      alert('Please specify at least one source.');
+      $('#formResult').html('');
+      return;
+    }
+    sendReportRequest();
+  }
 };
 
 sendReportRequest = () => {

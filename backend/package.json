@@ -18,6 +18,6 @@
     "local": "sls offline",
     "importCSV": "serverless invoke local --function import -d '{\"type\":\"csv\"}'",
     "importOTX": "serverless invoke local --function import -d '{\"type\":\"otx\"}'",
-    "cron": "serverless invoke local --function cron"
+    "cron": "serverless invoke local --function update"
   }
 }
