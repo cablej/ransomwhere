@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
+const UserModel = require('./model/Address.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
+const qs = require('qs');
+var jwt = require('jsonwebtoken');
 
 // AWS.config = new AWS.Config();
 // AWS.config.update({
@@ -144,7 +147,7 @@ module.exports.reports = async event => {
     body: JSON.stringify({
       result: await ReportModel.find({
         state
-      }).select('createdAt family')
+      })
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -190,6 +193,54 @@ module.exports.submit = async event => {
       'Access-Control-Allow-Credentials': true
     }
   };
+};
+
+module.exports.callback = async event => {
+  if (!event.queryStringParameters || !event.queryStringParameters.code) {
+    return {
+      statusCode: 302,
+      headers: {
+        Location: 'https://ransomwhe.re'
+      }
+    };
+  }
+  let code = event.queryStringParameters.code;
+  let auth = Buffer.from(
+    `${process.env.cognito_client_id}:${process.env.cognito_client_secret}`,
+    'utf8'
+  ).toString('base64');
+  let res = await axios.post(
+    'https://ransomwhere.auth.us-east-1.amazoncognito.com/oauth2/token',
+    qs.stringify({
+      grant_type: 'authorization_code',
+      client_id: process.env.cognito_client_id,
+      // client_secret: process.env.cognito_client_secret,
+      // scope: 'email openid',
+      code,
+      redirect_uri: 'http://localhost:3000/dev/callback'
+    }),
+    {
+      headers: {
+        Authorization: `Basic ${auth}`,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
+    }
+  );
+
+  let userInfo = jwt.decode(res.data.id_token);
+
+  if (!userInfo.email_verified) {
+    return {
+      statusCode: 403,
+      body: ''
+    };
+  }
+  userInfo.email = userInfo.email.toLowerCase();
+
+  let user = await UserModel.findOne({
+    email: userInfo.email
+  });
+  console.log(user);
 };
 
 module.exports.getS3 = async event => {
