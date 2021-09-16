@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const crypto = require('crypto');
 
 const model = mongoose.model(
   'User',
@@ -11,12 +12,13 @@ const model = mongoose.model(
         enum: ['user', 'admin'],
         default: 'user'
       },
-      apiKeys: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'ApiKey'
+      apiKey: {
+        type: String,
+        default: function() {
+          return crypto.randomBytes(32).toString('base64');
         }
-      ]
+      },
+      lastUsed: Date
     },
     { timestamps: true }
   )

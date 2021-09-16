@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Ransomwhere</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="../assets/css/main.css" />
+  <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+  <link rel="stylesheet" href="../assets/css/jquery.dataTables.min.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <noscript>
+    <link rel="stylesheet" href="assets/css/noscript.css" />
+  </noscript>
+  <meta name="description" content="Ransomwhere is the open, crowdsourced ransomware payment tracker.">
+  <meta name="og:title" property="og:title" content="Ransomwhere" />
+  <meta name="og:description" property="og:description"
+    content="Ransomwhere is the open, crowdsourced ransomware payment tracker." />
+  <meta name="keywords" content="ransomware, ransomwhere, bitcoin, ransom, payment, tracker">
+  <meta name="author" content="Jack Cable">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:creator" content="@cablej" />
+  <meta name="twitter:site" content="@ransomwhere_" />
+  <meta name="og:url" content="https://ransomwhe.re/">
+  <meta name="og:image" content="https://ransomwhe.re/assets/images/lock.png">
+  <meta name="twitter:image" content="https://ransomwhe.re/assets/images/lock.png">
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body class="is-preload">
+  <!-- Wrapper -->
+  <div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+      <div class="inner">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <span class="symbol"><img src="../assets/images/lock.png" alt="" /></span><span
+            class="title">Ransomwhere</span>
+        </a>
+
+        <!-- Nav -->
+        <nav>
+          <ul>
+            <li><a href="#menu">Menu</a></li>
+          </ul>
+        </nav>
+
+      </div>
+    </header>
+
+    <!-- Menu -->
+    <nav id="menu">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#browse">Browse Data</a></li>
+        <li><a href="#report">Report Addresses</a></li>
+        <li><a href="#download">Download Data</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a
+            href="https://login.ransomwhe.re/login?client_id=6627dhbl7smsuk05b7ouhn4dm0&response_type=code&scope=email+openid&redirect_uri=http://localhost:3000/dev/callback">Log
+            in</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main">
+      <div class="inner">
+        <div style="margin-top: 2em;" class="no-margin" id="faq">
+          <p>Logged in as: </p>
+        </div>
+        <section class="tiles">
+          <article class="style1">
+            <span class="image">
+              <img src="../assets/images/pic08.jpg" alt="" />
+            </span>
+            <a href="#browse">
+              <h2>Browse Data</h2>
+              <div class="content">
+                <p></p>
+              </div>
+            </a>
+          </article>
+          <article class="style2">
+            <span class="image">
+              <img src="../assets/images/pic01.jpg" alt="" />
+            </span>
+            <a href="#report">
+              <h2>Report Addresses</h2>
+              <div class="content">
+                <p></p>
+              </div>
+            </a>
+          </article>
+          <article class="style3">
+            <span class="image">
+              <img src="../assets/images/pic04.jpg" alt="" />
+            </span>
+            <a href="#download">
+              <h2>Download Data</h2>
+              <div class="content">
+                <p></p>
+              </div>
+            </a>
+          </article>
+          <article class="style4">
+            <span class="image">
+              <img src="../assets/images/pic15.jpg" alt="" />
+            </span>
+            <a href="#faq">
+              <h2>FAQ</h2>
+              <div class="content">
+                <p></p>
+              </div>
+            </a>
+          </article>
+        </section>
+        <div style="margin-top: 2em;" id="browse">
+          <h2>Browse ransomware data</h2>
+          <div>
+            <div class="chart-container" style="float:left"><canvas id="chart"></canvas>
+            </div>
+            <!-- <div class="chart-container" style="float:right"><canvas id="chart2"></canvas>
+            </div> -->
+            <center>
+              <p>Time range: <select class="inline-select time-select">
+                  <option value="week">this week</option>
+                  <option value="month">this month</option>
+                  <option value="year">this year</option>
+                  <option value="alltime" selected>all time</option>
+                </select></p>
+            </center>
+          </div>
+          <h3>Latest reports</h3>
+          <table id="reports" class="display" style="width:100%">
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Family</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div style="margin-top: 2em;" id="report">
+          <h2>Report ransomware addresses</h2>
+          <div class="paper">
+            <form id="reportForm">
+              <label>Enter one or more bitcoin addresses, separated by a newline or comma.</label>
+              <textarea placeholder="Bitcoin addresses" id="addresses"></textarea>
+              <br><label for="family">Family (if known): </label>
+              <input id="family" style="width:50%"></input>
+              <br><br><label for="amount">How much bitcoin is the ransomware demanding?</label>
+              <input type="number" id="amount" step="any">
+              <br><br>
+              <label>To verify the report:</label>
+              <ul class="formlist">
+                <li><label for="amount">Upload a screenshot of the payment page</label>
+                  <input type="file" name="payment_page" id="payment_page">
+                </li>
+                or
+                <li><label for="amount">Upload the ransom note</label>
+                  <input type="file" name="ransom_note" id="ransom_note">
+                </li>
+                or
+                <li>
+                  <label for="amount">Link to source (if public):</label>
+                  <input type="text" placeholder="https://" name="sourceLink" id="sourceLink"></input>
+                </li>
+              </ul>
+              <label>Any other notes (optional)</label>
+              <textarea placeholder="Notes" id="notes"></textarea>
+              <br><br>
+              <center>
+                <p>By submitting, you acknowledge that all contents of your report will be made publicly
+                  available.<br>We
+                  appreciate your help adding transparency to the ransomware ecosytem!</p>
+                <input type="submit" value="Submit" class="default" style="width:40%" />
+                <div id="formResult"></div>
+              </center>
+            </form>
+          </div>
+        </div>
+        <div style="margin-top: 2em;" id="download">
+          <h2>Download data</h2>
+          <p>Data is made freely available to interested individuals and organizations. To prevent abuse, all
+            applications must be approved. Please check back soon for instructions on applying for data access.</p>
+          <!-- <a class="button secondary" onclick="downloadFile()">Download all data</a> -->
+        </div>
+        <div style="margin-top: 2em;" class="no-margin" id="faq">
+          <h2>FAQ</h2>
+          <h3>Why track ransomware payments?</h3>
+          <p>Transparency is crucially needed in assessing the spread of ransomware and the efficacy of
+            mitigations. Fortunately, due to the transparent nature of Bitcoin, it's easy to track payments with
+            knowledge of receipt addresses. By crowdsourcing ransomware payment addresses, we hope to provide an open
+            resource for the security community and the public.</p>
+          <h3>How complete is the data?</h3>
+          <p>As Ransomwhere is new, we are still working on building out our dataset. Reports have placed total
+            ransomware revenue in 2020 at up to <a
+              href="https://blog.chainalysis.com/reports/ransomware-ecosystem-crypto-crime-2021">$350 million</a>.</p>
+          <h3>Can't someone fake a report?</h3>
+          <p>While it's impossible to verify with complete certainty that a report is accurate, we aim to utilize the
+            wisdom of the crowds to
+            prevent abuse. All reports are required to include a screenshot of the ransomware payment demand, and will
+            be reviewed before being displayed. Addresses with more than one report from different sources will be
+            given
+            priority, and all
+            elements of all reports will be publicly available. We will remove reports if we believe they are
+            untruthful.</p>
+          <h3>How are dollar values calculated?</h3>
+          <p>Dollar values are calculated using the bitcoin exchange rate the day that the transaction was sent.
+            As a result, they serve as an approximate measure but are not necessarily the exact amount the criminals
+            sold the bitcoin for.</p>
+          <h3>Do you have an API?</h3>
+          <p>Yes, Ransomwhere has a public API. The most basic endpoint is <code>https://api.ransomwhe.re/list</code> to
+            receive all past transactions. We are working on further documenting the API.</p>
+          <h3>How can I help out?</h3>
+          <p>We are always open to collaboration! Beyond submitting reports, please <a
+              href="mailto:ransomwhere@lightningsecurity.io">email us</a> if you are interested in further
+            collaboration. If you are interested in contributing to code, feel free to check out <a
+              href="https://github.com/cablej/ransomwhere">our GitHub repository</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="inner">
+        <section>
+          <h2>Follow</h2>
+          <ul class="icons">
+            <li><a href="https://twitter.com/ransomwhere_" class="icon brands style2 fa-twitter"><span
+                  class="label">Twitter</span></a></li>
+            <li><a href="https://github.com/cablej/ransomwhere" class="icon brands style2 fa-github"><span
+                  class="label">GitHub</span></a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Get in Touch</h2>
+          <ul class="icons">
+            <li><a href="mailto:ransomwhere@lightningsecurity.io" class="icon solid style2 fa-envelope"><span
+                  class="label">Email</span></a>
+            </li>
+          </ul>
+        </section>
+        <ul class="copyright">
+          <li>Built by <a href="https://cablej.io/">Jack Cable</a>.</li>
+        </ul>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/countup.umd.js"></script>
+  <script src="../assets/js/jquery.min.js"></script>
+  <script src="../assets/js/jquery-ui.min.js"></script>
+  <script src="../assets/js/chart.min.js"></script>
+  <script src="../assets/js/browser.min.js"></script>
+  <script src="../assets/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/js/breakpoints.min.js"></script>
+  <script src="../assets/js/util.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6Q48EM6ZN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('set', 'anonymizeIp', true);
+    gtag('config', 'G-Z6Q48EM6ZN');
+  </script>
+
+</body>
+
+</html>

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
-const UserModel = require('./model/Address.js');
+const UserModel = require('./model/User.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const qs = require('qs');
@@ -14,6 +14,11 @@ var jwt = require('jsonwebtoken');
 //   secretAccessKey: process.env.aws_secret_access_key,
 //   region: 'us-east-1'
 // });
+
+const domain =
+  process.env.NODE_ENV === 'dev'
+    ? 'http://localhost:8081'
+    : 'https://ransomwhe.re';
 
 mongoose.connect(process.env.MONGO_URI);
 
@@ -200,7 +205,7 @@ module.exports.callback = async event => {
     return {
       statusCode: 302,
       headers: {
-        Location: 'https://ransomwhe.re'
+        Location: domain
       }
     };
   }
@@ -217,7 +222,10 @@ module.exports.callback = async event => {
       // client_secret: process.env.cognito_client_secret,
       // scope: 'email openid',
       code,
-      redirect_uri: 'http://localhost:3000/dev/callback'
+      redirect_uri:
+        process.env.NODE_ENV === 'dev'
+          ? 'http://localhost:3000/dev/callback'
+          : 'https://api.ransomwhe.re/callback'
     }),
     {
       headers: {
@@ -240,7 +248,25 @@ module.exports.callback = async event => {
   let user = await UserModel.findOne({
     email: userInfo.email
   });
-  console.log(user);
+
+  if (!user) {
+    user = await UserModel.create({
+      email: userInfo.email
+    });
+    //TODO: prompt for MFA
+  }
+
+  return {
+    statusCode: 302,
+    headers: {
+      Location: domain + '/app',
+      'Set-Cookie': `api_key=${
+        user.apiKey
+      }; Secure; HttpOnly; Max-Age=3600; Domain=${
+        process.env.NODE_ENV === 'dev' ? 'localhost:8081' : 'ransomwhe.re'
+      }`
+    }
+  };
 };
 
 module.exports.getS3 = async event => {
