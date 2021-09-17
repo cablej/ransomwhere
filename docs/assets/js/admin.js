@@ -1,6 +1,3 @@
-var ransomTotal = 2.51;
-var dollarDisplay = true;
-
 var API_URL = 'http://localhost:3000/dev/';
 
 // var API_URL = "https://api.ransomwhe.re/";

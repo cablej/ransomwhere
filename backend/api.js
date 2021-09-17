@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ReportModel = require('./model/Report.js');
 const AddressModel = require('./model/Address.js');
+const UserModel = require('./model/User.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
+const qs = require('qs');
+var jwt = require('jsonwebtoken');
 
 // AWS.config = new AWS.Config();
 // AWS.config.update({
@@ -11,6 +14,11 @@ const axios = require('axios');
 //   secretAccessKey: process.env.aws_secret_access_key,
 //   region: 'us-east-1'
 // });
+
+const domain =
+  process.env.NODE_ENV === 'dev'
+    ? 'http://localhost:8081'
+    : 'https://ransomwhe.re';
 
 mongoose.connect(process.env.MONGO_URI);
 
@@ -39,6 +47,37 @@ calculateValue = (transactions, prices, minimum, adjust) => {
     btcTotal += amount;
   }
   return [usdTotal, btcTotal];
+};
+
+getCookies = str => {
+  var cookies = {};
+  str.split(';').forEach(function(cookie) {
+    var parts = cookie.match(/(.*?)=(.*)$/);
+    cookies[parts[1].trim()] = (parts[2] || '').trim();
+  });
+  return cookies;
+};
+
+getUser = async event => {
+  let apiKey = '';
+  if ('Cookie' in event.headers) {
+    let cookies = getCookies(event.headers.Cookie);
+    if ('api_key' in cookies) {
+      apiKey = cookies['api_key'];
+    }
+  } else {
+    // Check auth header
+  }
+  if (!apiKey) return null;
+  return await UserModel.findOne({
+    apiKey
+  });
+};
+
+isAdmin = async event => {
+  let user = getUser(event);
+  if (!user) return false;
+  return user.role === 'admin';
 };
 
 module.exports.list = async event => {
@@ -119,6 +158,12 @@ module.exports.list = async event => {
 };
 
 module.exports.exportAll = async event => {
+  const user = getUser(event);
+  if (!user) {
+    return {
+      statusCode: 401
+    };
+  }
   let addresses = await AddressModel.find().select(
     '-_id -transactions._id -__v'
   );
@@ -136,15 +181,20 @@ module.exports.exportAll = async event => {
 };
 
 module.exports.reports = async event => {
+  const user = getUser(event);
   body = JSON.parse(event.body);
   state = 'accepted';
   if (body.state) state = body.state;
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: await ReportModel.find({
-        state
-      }).select('createdAt family')
+      result: user
+        ? await ReportModel.find({
+            state
+          })
+        : await ReportModel.find({
+            state
+          }).select('createdAt family')
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -154,6 +204,12 @@ module.exports.reports = async event => {
 };
 
 module.exports.updateReport = async event => {
+  const admin = isAdmin(event);
+  if (!admin) {
+    return {
+      statusCode: 403
+    };
+  }
   id = event.pathParameters.id;
   body = JSON.parse(event.body);
   await ReportModel.findByIdAndUpdate(id, {
@@ -189,6 +245,89 @@ module.exports.submit = async event => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     }
+  };
+};
+
+module.exports.callback = async event => {
+  if (!event.queryStringParameters || !event.queryStringParameters.code) {
+    return {
+      statusCode: 302,
+      headers: {
+        Location: domain
+      }
+    };
+  }
+  let code = event.queryStringParameters.code;
+  let auth = Buffer.from(
+    `${process.env.cognito_client_id}:${process.env.cognito_client_secret}`,
+    'utf8'
+  ).toString('base64');
+  let res = await axios.post(
+    'https://ransomwhere.auth.us-east-1.amazoncognito.com/oauth2/token',
+    qs.stringify({
+      grant_type: 'authorization_code',
+      client_id: process.env.cognito_client_id,
+      // client_secret: process.env.cognito_client_secret,
+      // scope: 'email openid',
+      code,
+      redirect_uri:
+        process.env.NODE_ENV === 'dev'
+          ? 'http://localhost:3000/dev/callback'
+          : 'https://api.ransomwhe.re/callback'
+    }),
+    {
+      headers: {
+        Authorization: `Basic ${auth}`,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
+    }
+  );
+
+  let userInfo = jwt.decode(res.data.id_token);
+
+  if (!userInfo.email_verified) {
+    return {
+      statusCode: 403,
+      body: ''
+    };
+  }
+  userInfo.email = userInfo.email.toLowerCase();
+
+  let user = await UserModel.findOne({
+    email: userInfo.email
+  });
+
+  if (!user) {
+    user = await UserModel.create({
+      email: userInfo.email
+    });
+    //TODO: prompt for MFA
+  }
+
+  return {
+    statusCode: 302,
+    headers: {
+      Location: domain + '/app',
+      'Set-Cookie': `api_key=${
+        user.apiKey
+      }; Secure; HttpOnly; Max-Age=3600; Domain=${
+        process.env.NODE_ENV === 'dev' ? 'localhost:3000' : 'api.ransomwhe.re'
+      }`
+    }
+  };
+};
+
+module.exports.me = async event => {
+  let user = await getUser(event);
+  if (!user) {
+    return {
+      statusCode: 401
+    };
+  }
+  console.log(user);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(user)
   };
 };
 

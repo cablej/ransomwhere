@@ -1,12 +1,10 @@
-/*
-	Phantom by Pixelarity
-	pixelarity.com | hello@pixelarity.com
-	License: pixelarity.com/license
-*/
-
 let S3_URL = 'https://ransomwhere.s3.amazonaws.com/';
 
-apiRequest = (method, endpoint, body, headers = {}) => {
+// var API_URL = 'http://localhost:3000/dev/';
+
+var API_URL = 'https://api.ransomwhe.re/';
+
+apiRequest = (method, endpoint, body, headers = {}, xhrFields = {}) => {
   if (method == 'GET') {
     headers['Cache-Control'] = 'public, max-age=600';
   }
@@ -16,7 +14,8 @@ apiRequest = (method, endpoint, body, headers = {}) => {
     url: API_URL + endpoint,
     contentType: 'application/json',
     dataType: 'json',
-    headers
+    headers,
+    xhrFields: xhrFields
   });
 };
 
