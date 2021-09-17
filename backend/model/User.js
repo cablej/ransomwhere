@@ -7,6 +7,7 @@ const model = mongoose.model(
   new mongoose.Schema(
     {
       email: String,
+      name: String,
       role: {
         type: String,
         enum: ['user', 'admin'],

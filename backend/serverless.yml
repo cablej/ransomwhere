@@ -45,7 +45,7 @@ functions:
           path: export
           method: get
           cors:
-            origin: '*'
+            origin: 'ransomwhe.re'
             allowCredentials: true
             cacheControl: 'public, max-age=600'
             maxAge: 600
@@ -96,6 +96,24 @@ functions:
       - http:
           path: callback
           method: get
+
+  me:
+    handler: api.me
+    events:
+      - http:
+          path: users/me
+          method: get
+          cors:
+            origin: 'ransomwhe.re'
+            allowCredentials: true
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Cache-Control
 
   update:
     handler: cron.update
