@@ -1,10 +1,6 @@
 var ransomTotal = 2.51;
 var dollarDisplay = true;
 
-var API_URL = 'http://superhost:3000/dev/';
-
-// var API_URL = 'https://api.ransomwhe.re/';
-
 let table;
 let transactionsTable;
 let chart;
