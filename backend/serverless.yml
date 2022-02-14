@@ -45,7 +45,7 @@ functions:
           path: export
           method: get
           cors:
-            origin: 'ransomwhe.re'
+            origin: '*'
             allowCredentials: true
             cacheControl: 'public, max-age=600'
             maxAge: 600
