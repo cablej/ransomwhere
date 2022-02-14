@@ -158,15 +158,37 @@ module.exports.list = async event => {
 };
 
 module.exports.exportAll = async event => {
-  const user = getUser(event);
-  if (!user) {
-    return {
-      statusCode: 401
-    };
-  }
-  let addresses = await AddressModel.find().select(
-    '-_id -transactions._id -__v'
+  // const user = getUser(event);
+  // if (!user) {
+  //   return {
+  //     statusCode: 401
+  //   };
+  // }
+
+  let res = await axios.get(
+    'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
   );
+  let prices = res.data.bpi;
+
+  let addresses = await AddressModel.find()
+    .select('-_id -transactions._id -__v ')
+    .lean();
+
+  for (let address of addresses) {
+    let balanceUSD = 0;
+    for (let tx of address.transactions) {
+      date = formatDate(tx.time * 1000);
+      if (!(date in prices)) {
+        prices[date] = 0;
+      }
+      price = prices[date];
+      let amount = tx.amount / 1e8;
+      tx['amountUSD'] = amount * price;
+      balanceUSD += amount * price;
+    }
+    address['balanceUSD'] = balanceUSD;
+  }
+
   return {
     statusCode: 200,
     body: JSON.stringify({
