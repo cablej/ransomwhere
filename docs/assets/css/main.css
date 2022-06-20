@@ -50,6 +50,11 @@
   width: 500px !important;
 }
 
+.logo_link {
+  border-bottom: 0;
+  text-decoration: none;
+}
+
 html,
 body,
 div,

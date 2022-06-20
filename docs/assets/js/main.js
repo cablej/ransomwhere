@@ -29,7 +29,7 @@ toggleDollar = () => {
   }
 };
 
-submitReport = event => {
+submitReport = (event) => {
   event.preventDefault();
 
   $('#formResult').html('<br><br>Submitting...');
@@ -65,13 +65,13 @@ submitReport = event => {
         //   'x-amz-acl': 'public-read'
         // },
         type: 'PUT',
-        success: function(json, textStatus, jqXhr) {
+        success: function (json, textStatus, jqXhr) {
           numCompleted += 1;
           if (numCompleted == numFiles) {
             sendReportRequest();
           }
         },
-        error: function(jqXhr, textStatus, errorThrown) {
+        error: function (jqXhr, textStatus, errorThrown) {
           alert('Error submitting, please try again.');
         }
       });
@@ -100,21 +100,21 @@ sendReportRequest = () => {
   body.notes = $('#notes').val();
 
   apiRequest('POST', 'submit', body)
-    .then(res => {
+    .then((res) => {
       alert('Successfully submitted!');
       $('#reportForm')[0].reset();
       $('#formResult').html('');
     })
-    .catch(err => {
+    .catch((err) => {
       alert('Error submitting, please try again.');
       console.log(err);
       $('#formResult').html('');
     });
 };
 
-getBalances = range => {
+getBalances = (range) => {
   apiRequest('GET', 'list?range=' + range)
-    .then(res => {
+    .then((res) => {
       let { usdTotal, btcTotal, transactions, keyValues } = res;
       usdTotal_ = usdTotal;
       btcTotal_ = btcTotal;
@@ -123,17 +123,17 @@ getBalances = range => {
       plotBalances(keyValues);
       // updateTransactions(transactions);
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-updateTransactions = transactions => {
+updateTransactions = (transactions) => {
   if (transactionsTable) transactionsTable.destroy();
   columns = [
     { title: 'Family', data: 'family', render: $.fn.dataTable.render.text() },
     { title: 'Address', data: 'address', render: $.fn.dataTable.render.text() },
     {
       title: 'Date',
-      data: row => new Date(row.time * 1000).toLocaleDateString(),
+      data: (row) => new Date(row.time * 1000).toLocaleDateString(),
       render: $.fn.dataTable.render.text(),
       type: 'date'
     },
@@ -168,11 +168,11 @@ plotTransactions = (addresses, transactions, minimum) => {
       address.family
     ].concat(
       address.transactions
-        .map(transaction => ({
+        .map((transaction) => ({
           time: transaction.time,
           amount: transaction.amount / 10e7
         }))
-        .filter(transaction => transaction.time > minimum)
+        .filter((transaction) => transaction.time > minimum)
     );
   }
   datasets = [];
@@ -252,7 +252,7 @@ plotTransactions = (addresses, transactions, minimum) => {
   });
 };
 
-plotBalances = keyValues => {
+plotBalances = (keyValues) => {
   var ctx = document.getElementById('chart').getContext('2d');
   if (chart) {
     chart.destroy();
@@ -260,11 +260,11 @@ plotBalances = keyValues => {
   chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: keyValues.map(a => a[0]),
+      labels: keyValues.map((a) => a[0]),
       datasets: [
         {
           label: 'Total payments (USD)',
-          data: keyValues.map(a => a[1]),
+          data: keyValues.map((a) => a[1]),
           backgroundColor: ['#373c70'],
           borderColor: ['#373c70'],
           borderWidth: 1
@@ -285,7 +285,7 @@ plotBalances = keyValues => {
 
 downloadFile = () => {
   apiRequest('GET', 'export')
-    .then(res => {
+    .then((res) => {
       $('<a />', {
         download: 'data.json',
         href:
@@ -293,21 +293,22 @@ downloadFile = () => {
           encodeURIComponent(JSON.stringify(res.result))
       })
         .appendTo('body')
-        .click(function() {
+        .click(function () {
           $(this).remove();
         })[0]
         .click();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
+  gtag('event', 'file_download', {});
 };
 
-(function($) {
+(function ($) {
   $('#reportForm').submit(submitReport);
 
   var isFirst = true;
 
   $('.time-select')
-    .change(function(e) {
+    .change(function (e) {
       if (isFirst) {
         isFirst = false;
         return;
