@@ -22,7 +22,7 @@ const domain =
 
 mongoose.connect(process.env.MONGO_URI);
 
-formatDate = date => {
+formatDate = (date) => {
   var d = new Date(date),
     month = '' + (d.getMonth() + 1),
     day = '' + d.getDate(),
@@ -49,16 +49,16 @@ calculateValue = (transactions, prices, minimum, adjust) => {
   return [usdTotal, btcTotal];
 };
 
-getCookies = str => {
+getCookies = (str) => {
   var cookies = {};
-  str.split(';').forEach(function(cookie) {
+  str.split(';').forEach(function (cookie) {
     var parts = cookie.match(/(.*?)=(.*)$/);
     cookies[parts[1].trim()] = (parts[2] || '').trim();
   });
   return cookies;
 };
 
-getUser = async event => {
+getUser = async (event) => {
   let apiKey = '';
   if ('Cookie' in event.headers) {
     let cookies = getCookies(event.headers.Cookie);
@@ -74,13 +74,13 @@ getUser = async event => {
   });
 };
 
-isAdmin = async event => {
+isAdmin = async (event) => {
   let user = getUser(event);
   if (!user) return false;
   return user.role === 'admin';
 };
 
-module.exports.list = async event => {
+module.exports.list = async (event) => {
   let addresses = await AddressModel.find().select(
     '-_id -transactions._id -__v'
   );
@@ -99,12 +99,13 @@ module.exports.list = async event => {
   } else if (range == 'month') {
     minimum = Date.now() / 1000 - 60 * 60 * 24 * 30;
   } else if (range == 'year') {
-    minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
+    // minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
+    minimum = new Date(2021, 0, 1).getTime() / 1000;
   }
 
   let transactions = addresses
-    .map(address =>
-      address.transactions.map(transaction => ({
+    .map((address) =>
+      address.transactions.map((transaction) => ({
         address: address.address,
         family: address.family,
         hash: transaction.hash,
@@ -157,7 +158,7 @@ module.exports.list = async event => {
   };
 };
 
-module.exports.exportAll = async event => {
+module.exports.exportAll = async (event) => {
   // const user = getUser(event);
   // if (!user) {
   //   return {
@@ -202,7 +203,7 @@ module.exports.exportAll = async event => {
   };
 };
 
-module.exports.reports = async event => {
+module.exports.reports = async (event) => {
   const user = getUser(event);
   body = JSON.parse(event.body);
   state = 'accepted';
@@ -225,7 +226,7 @@ module.exports.reports = async event => {
   };
 };
 
-module.exports.updateReport = async event => {
+module.exports.updateReport = async (event) => {
   const admin = isAdmin(event);
   if (!admin) {
     return {
@@ -247,7 +248,7 @@ module.exports.updateReport = async event => {
   };
 };
 
-module.exports.submit = async event => {
+module.exports.submit = async (event) => {
   body = JSON.parse(event.body);
   report = await ReportModel.create({
     addresses: body.addresses,
@@ -270,7 +271,7 @@ module.exports.submit = async event => {
   };
 };
 
-module.exports.callback = async event => {
+module.exports.callback = async (event) => {
   if (!event.queryStringParameters || !event.queryStringParameters.code) {
     return {
       statusCode: 302,
@@ -339,7 +340,7 @@ module.exports.callback = async event => {
   };
 };
 
-module.exports.me = async event => {
+module.exports.me = async (event) => {
   let user = await getUser(event);
   if (!user) {
     return {
@@ -353,7 +354,7 @@ module.exports.me = async event => {
   };
 };
 
-module.exports.getS3 = async event => {
+module.exports.getS3 = async (event) => {
   body = JSON.parse(event.body);
   let type = body.type;
   let name = body.name;
