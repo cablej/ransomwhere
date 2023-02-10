@@ -7,6 +7,7 @@ const AWS = require('aws-sdk');
 const axios = require('axios');
 const qs = require('qs');
 var jwt = require('jsonwebtoken');
+const csv = require('csvtojson');
 
 // AWS.config = new AWS.Config();
 // AWS.config.update({
@@ -80,15 +81,22 @@ isAdmin = async (event) => {
   return user.role === 'admin';
 };
 
+getPrices = async (event) => {
+  const csvFilePath = 'BTC-USD.csv';
+  const parsed = await csv().fromFile(csvFilePath);
+  prices = {};
+  for (let row of parsed) {
+    prices[row['Date']] = Number(row['Close']);
+  }
+  return prices;
+};
+
 module.exports.list = async (event) => {
   let addresses = await AddressModel.find().select(
     '-_id -transactions._id -__v'
   );
 
-  let res = await axios.get(
-    'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
-  );
-  let prices = res.data.bpi;
+  let prices = await getPrices();
   let range = event.queryStringParameters.range;
 
   let minimum = 0;
@@ -100,7 +108,7 @@ module.exports.list = async (event) => {
     minimum = Date.now() / 1000 - 60 * 60 * 24 * 30;
   } else if (range == 'year') {
     // minimum = Date.now() / 1000 - 60 * 60 * 24 * 365;
-    minimum = new Date(2021, 0, 1).getTime() / 1000;
+    minimum = new Date(2023, 0, 1).getTime() / 1000;
   }
 
   let transactions = addresses
@@ -165,11 +173,7 @@ module.exports.exportAll = async (event) => {
   //     statusCode: 401
   //   };
   // }
-
-  let res = await axios.get(
-    'https://api.coindesk.com/v1/bpi/historical/close.json?start=2015-09-01&end=2022-09-05'
-  );
-  let prices = res.data.bpi;
+  let prices = await getPrices();
 
   let addresses = await AddressModel.find()
     .select('-_id -transactions._id -__v ')

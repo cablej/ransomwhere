@@ -1,8 +1,8 @@
 let S3_URL = 'https://ransomwhere.s3.amazonaws.com/';
 
-// var API_URL = 'http://localhost:3000/dev/';
+var API_URL = 'http://localhost:3000/dev/';
 
-var API_URL = 'https://api.ransomwhe.re/';
+// var API_URL = 'https://api.ransomwhe.re/';
 
 apiRequest = (method, endpoint, body, headers = {}, xhrFields = {}) => {
   if (method == 'GET') {
@@ -21,7 +21,7 @@ apiRequest = (method, endpoint, body, headers = {}, xhrFields = {}) => {
 
 getReports = (state = 'new', admin = false) => {
   apiRequest('POST', 'reports', { state })
-    .then(res => {
+    .then((res) => {
       let reports = res.result;
       if (table) table.destroy();
       columns = [
@@ -42,16 +42,12 @@ getReports = (state = 'new', admin = false) => {
       if (admin) {
         columns.unshift({
           title: 'Action',
-          data: report =>
-            `<a onclick="updateReport('${
-              report._id
-            }', 'accepted')" class="button primary small">Approve</a> <a onclick="updateReport('${
-              report._id
-            }', 'rejected')" class="button small">Deny</a>`
+          data: (report) =>
+            `<a onclick="updateReport('${report._id}', 'accepted')" class="button primary small">Approve</a> <a onclick="updateReport('${report._id}', 'rejected')" class="button small">Deny</a>`
         });
         columns.push({
           title: 'Addresses',
-          data: report => {
+          data: (report) => {
             return report.addresses.length > 2
               ? report.addresses.splice(0, 2).join(', ') + '…'
               : report.addresses.join(', ');
@@ -60,7 +56,7 @@ getReports = (state = 'new', admin = false) => {
         });
         columns.push({
           title: 'Source',
-          data: report => {
+          data: (report) => {
             if (report.source) return report.source;
             else if (report.payment_page_url)
               return S3_URL + report.payment_page_url;
@@ -81,10 +77,10 @@ getReports = (state = 'new', admin = false) => {
         order: [[0, 'desc']]
       });
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-(function($) {
+(function ($) {
   $.fn.dataTable.ext.errMode = 'none';
   var $window = $(window),
     $body = $('body');
@@ -100,8 +96,8 @@ getReports = (state = 'new', admin = false) => {
   });
 
   // Play initial animations on page load.
-  $window.on('load', function() {
-    window.setTimeout(function() {
+  $window.on('load', function () {
+    window.setTimeout(function () {
       $body.removeClass('is-preload');
     }, 100);
   });
@@ -113,7 +109,7 @@ getReports = (state = 'new', admin = false) => {
   var $form = $('form');
 
   // Auto-resizing textareas.
-  $form.find('textarea').each(function() {
+  $form.find('textarea').each(function () {
     var $this = $(this),
       $wrapper = $('<div class="textarea-wrapper"></div>'),
       $submits = $this.find('input[type="submit"]');
@@ -123,7 +119,7 @@ getReports = (state = 'new', admin = false) => {
       .attr('rows', 1)
       .css('overflow', 'hidden')
       .css('resize', 'none')
-      .on('keydown', function(event) {
+      .on('keydown', function (event) {
         if (event.keyCode == 13 && event.ctrlKey) {
           event.preventDefault();
           event.stopPropagation();
@@ -131,17 +127,17 @@ getReports = (state = 'new', admin = false) => {
           $(this).blur();
         }
       })
-      .on('blur focus', function() {
+      .on('blur focus', function () {
         $this.val($.trim($this.val()));
       })
-      .on('input blur focus --init', function() {
+      .on('input blur focus --init', function () {
         $wrapper.css('height', $this.height());
 
         $this
           .css('height', 'auto')
           .css('height', $this.prop('scrollHeight') + 'px');
       })
-      .on('keyup', function(event) {
+      .on('keyup', function (event) {
         if (event.keyCode == 9) $this.select();
       })
       .triggerHandler('--init');
@@ -158,36 +154,36 @@ getReports = (state = 'new', admin = false) => {
 
   $menu._locked = false;
 
-  $menu._lock = function() {
+  $menu._lock = function () {
     if ($menu._locked) return false;
 
     $menu._locked = true;
 
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       $menu._locked = false;
     }, 350);
 
     return true;
   };
 
-  $menu._show = function() {
+  $menu._show = function () {
     if ($menu._lock()) $body.addClass('is-menu-visible');
   };
 
-  $menu._hide = function() {
+  $menu._hide = function () {
     if ($menu._lock()) $body.removeClass('is-menu-visible');
   };
 
-  $menu._toggle = function() {
+  $menu._toggle = function () {
     if ($menu._lock()) $body.toggleClass('is-menu-visible');
   };
 
   $menu
     .appendTo($body)
-    .on('click', function(event) {
+    .on('click', function (event) {
       event.stopPropagation();
     })
-    .on('click', 'a', function(event) {
+    .on('click', 'a', function (event) {
       var href = $(this).attr('href');
 
       event.preventDefault();
@@ -199,25 +195,25 @@ getReports = (state = 'new', admin = false) => {
       // Redirect.
       if (href == '#menu') return;
 
-      window.setTimeout(function() {
+      window.setTimeout(function () {
         window.location.href = href;
       }, 350);
     })
     .append('<a class="close" href="#menu">Close</a>');
 
   $body
-    .on('click', 'a[href="#menu"]', function(event) {
+    .on('click', 'a[href="#menu"]', function (event) {
       event.stopPropagation();
       event.preventDefault();
 
       // Toggle.
       $menu._toggle();
     })
-    .on('click', function(event) {
+    .on('click', function (event) {
       // Hide.
       $menu._hide();
     })
-    .on('keydown', function(event) {
+    .on('keydown', function (event) {
       // Hide on escape.
       if (event.keyCode == 27) $menu._hide();
     });
