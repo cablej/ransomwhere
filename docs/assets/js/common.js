@@ -1,8 +1,8 @@
 let S3_URL = 'https://ransomwhere.s3.amazonaws.com/';
 
-var API_URL = 'http://localhost:3000/dev/';
+// var API_URL = 'http://localhost:3000/dev/';
 
-// var API_URL = 'https://api.ransomwhe.re/';
+var API_URL = 'https://api.ransomwhe.re/';
 
 apiRequest = (method, endpoint, body, headers = {}, xhrFields = {}) => {
   if (method == 'GET') {
