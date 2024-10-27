@@ -15,7 +15,7 @@ module.exports.update = async (event) => {
   mongoose.connect(process.env.MONGO_URI);
   let reports = await ReportModel.find({
     state: 'accepted',
-    createdAt: { $gte: Date.now() - 2 * 24 * 60 * 60 * 1000 }
+    createdAt: { $gte: Date.now() - 180 * 24 * 60 * 60 * 1000 }
   });
 
   console.log('Starting for ' + reports.length + ' reports');
@@ -75,8 +75,18 @@ module.exports.update = async (event) => {
       }
       if (res.data.txs.length == 0) break;
       for (let tx of res.data.txs) {
+        let sendingAddresses = {};
+        for (let input of tx.inputs) {
+          sendingAddresses[input['prev_out']['addr']] = true;
+        }
         for (let out of tx.out) {
           if (out['addr'] in addressesMap) {
+            if (out['addr'] in sendingAddresses) {
+              console.log(
+                'address ' + out['addr'] + ' sent to itself, skipping'
+              );
+              continue;
+            }
             if (!('transactions' in addressesMap[out['addr']])) {
               addressesMap[out['addr']].transactions = [];
             }

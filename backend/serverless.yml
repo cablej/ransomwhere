@@ -12,7 +12,14 @@ provider:
     - Effect: Allow
       Action:
         - s3:*
-      Resource: "arn:aws:s3:::ransomwhere"
+      Resource: 'arn:aws:s3:::ransomwhere'
+
+  serverless-offline:
+    noPrependStageInUrl: true
+
+  environment:
+    MONGO_URI: ${env:MONGO_URI}
+    NODE_ENV: ${env:NODE_ENV}
 
 plugins:
   - serverless-offline

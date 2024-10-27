@@ -14,12 +14,13 @@ const model = mongoose.model(
         required: true,
         validate: {
           validator(addresses) {
-            return addresses.every(a => validator.isAlphanumeric(a));
+            return addresses.every((a) => validator.isAlphanumeric(a));
           }
         }
       },
       family: String,
       amount: Number,
+      email: { type: String, select: false },
       ransom_note_url: String,
       payment_page_url: String,
       state: {

@@ -76,6 +76,7 @@ getUser = async (event) => {
 };
 
 isAdmin = async (event) => {
+  if (process.env.NODE_ENV === 'dev') return true;
   let user = getUser(event);
   if (!user) return false;
   return user.role === 'admin';
@@ -208,17 +209,17 @@ module.exports.exportAll = async (event) => {
 };
 
 module.exports.reports = async (event) => {
-  const user = getUser(event);
+  const admin = await isAdmin(event);
   body = JSON.parse(event.body);
   state = 'accepted';
   if (body.state) state = body.state;
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: user
+      result: admin
         ? await ReportModel.find({
             state
-          })
+          }).select('createdAt family source email amount addresses')
         : await ReportModel.find({
             state
           }).select('createdAt family')
@@ -258,6 +259,7 @@ module.exports.submit = async (event) => {
     addresses: body.addresses,
     family: body.family,
     amount: body.amount,
+    email: body.email,
     source: body.source,
     notes: body.notes,
     payment_page_url: body.payment_page_url,
@@ -351,7 +353,6 @@ module.exports.me = async (event) => {
       statusCode: 401
     };
   }
-  console.log(user);
   return {
     statusCode: 200,
     body: JSON.stringify(user)

@@ -182,9 +182,15 @@
               </ul>
               <label>Any other notes (optional)</label>
               <textarea placeholder="Notes" id="notes"></textarea>
+              <br>
+              <label for="amount">Your email address (optional)</label>
+              Your email address will be kept private and will only be used to contact you if more information is
+              needed.<br><br>
+              <input id="email" style="width:50%" name="email">
               <br><br>
               <center>
-                <p>By submitting, you acknowledge that all contents of your report will be made publicly
+                <p>By submitting, you acknowledge that all contents of your report (besides your email, if submitted)
+                  will be made publicly
                   available.<br>We
                   appreciate your help adding transparency to the ransomware ecosytem!</p>
                 <input type="submit" value="Submit" class="default" style="width:40%" />
@@ -220,12 +226,16 @@
           <h3>Research</h3>
           Read research published based on Ransomwhere data:
           <ul>
-            <li><a href="https://arxiv.org/abs/2205.05028">Oosthoek, Kris, Jack Cable, Georgios Smaragdakis. 'A Tale of
-                Two Markets: Investigating the Ransomware
-                Payments Economy'. Communications of the ACM. 2022.</a></li>
+            <li><a href="https://arxiv.org/abs/2408.15420">Jack Cable, Ian W Gray, Damon
+                McCoy. Showing the Receipts: Understanding the Modern Ransomware Ecosystem. Symposium on Electronic
+                Crime
+                Research. 2024.</a></li>
             <li><a href="https://arxiv.org/abs/2304.11681">Ian W Gray, Jack Cable, Benjamin Brown, Vlad Cuiujuclu, Damon
                 McCoy. Money Over Morals: A Business Analysis of Conti Ransomware. Symposium on Electronic Crime
                 Research. 2023.</a></li>
+            <li><a href="https://arxiv.org/abs/2205.05028">Oosthoek, Kris, Jack Cable, Georgios Smaragdakis. 'A Tale of
+                Two Markets: Investigating the Ransomware
+                Payments Economy'. Communications of the ACM. 2022.</a></li>
           </ul>
         </div>
         <div style="margin-top: 2em;" class="no-margin" id="faq">
@@ -234,10 +244,6 @@
           <p>Ransomwhere can be cited as:</p>
           <pre><code>Cable, Jack. (2022). Ransomwhere: A Crowdsourced Ransomware Payment Dataset (1.0.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6512123</code></pre>
           <p><a href="https://zenodo.org/record/6512123/export/hx">Export as BibTex</a></p>
-          <h3>How complete is the data?</h3>
-          <p>As Ransomwhere is new, we are still working on building out our dataset. Reports have placed total
-            ransomware revenue in 2020 at up to <a
-              href="https://blog.chainalysis.com/reports/ransomware-ecosystem-crypto-crime-2021">$350 million</a>.</p>
           <h3>Can't someone fake a report?</h3>
           <p>While it's impossible to verify with complete certainty that a report is accurate, we aim to utilize the
             wisdom of the crowds to
@@ -255,6 +261,11 @@
           <p>Yes, Ransomwhere has a public API. The most basic endpoint is <code>https://api.ransomwhe.re/export</code>
             to
             receive all past transactions. We are working on further documenting the API.</p>
+          <h3>Why are many payments unlabeled?</h3>
+          <p>These payments are sourced from <a href="https://arxiv.org/abs/2408.15420">Showing the Receipts:
+              Understanding the Modern Ransomware Ecosystem</a>. In this paper, we identify ransomware payments with
+            high confidence, but the specific family associated with the ransomware group is lower confidence. Please
+            get in touch if you are interested in accessing the set of labels.</p>
           <h3>How can I help out?</h3>
           <p>We are always open to collaboration! Beyond submitting reports, please <a
               href="mailto:ransomwhere@lightningsecurity.io">email us</a> if you are interested in further

@@ -98,6 +98,7 @@ sendReportRequest = () => {
   body.amount = $('#amount').val();
   body.source = $('#sourceLink').val();
   body.notes = $('#notes').val();
+  body.email = $('#email').val();
 
   apiRequest('POST', 'submit', body)
     .then((res) => {
