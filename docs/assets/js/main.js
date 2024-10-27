@@ -11,16 +11,16 @@ let btcTotal_;
 
 var numAnim = new countUp.CountUp('count', ransomTotal, {
   prefix: '$',
-  decimalPlaces: 2
+  decimalPlaces: 0
 });
 
-numAnim.update(279067541.09);
+numAnim.update(1016519907);
 
 toggleDollar = () => {
   dollarDisplay = !dollarDisplay;
   numAnim = new countUp.CountUp('count', ransomTotal, {
     prefix: dollarDisplay ? '$' : '₿',
-    decimalPlaces: 2
+    decimalPlaces: 0
   });
   if (dollarDisplay) {
     numAnim.update(usdTotal_);

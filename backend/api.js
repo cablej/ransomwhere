@@ -212,7 +212,7 @@ module.exports.reports = async (event) => {
   const admin = await isAdmin(event);
   body = JSON.parse(event.body);
   state = 'accepted';
-  if (body.state) state = body.state;
+  if (body.state && admin) state = body.state;
   return {
     statusCode: 200,
     body: JSON.stringify({
